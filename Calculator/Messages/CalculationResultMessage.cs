@@ -11,12 +11,12 @@ namespace Calculator
         
         public override void Serialize(Stream stream)
         {
-            BinaryUtils.WriteInt(stream, Value);
+            BinaryUtils.WriteInt32(stream, Value);
         }
 
         public override void Deserialize(Stream stream)
         {
-            Value = BinaryUtils.ReadInt(stream);
+            Value = BinaryUtils.ReadInt32(stream);
         }
     }
 }

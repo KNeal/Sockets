@@ -6,13 +6,13 @@ namespace Sockets
 {
     public static class BinaryUtils
     {
-        public static void WriteInt(Stream stream, int value)
+        public static void WriteInt32(Stream stream, int value)
         {
             byte[] bytes = BitConverter.GetBytes(value);
             stream.Write(bytes, 0, bytes.Length);
         }
 
-        public static int ReadInt(Stream stream)
+        public static int ReadInt32(Stream stream)
         {
             byte[] bytes = new byte[sizeof(Int32)];
             for (int i = 0; i < bytes.Length; ++i)
@@ -23,17 +23,34 @@ namespace Sockets
             return BitConverter.ToInt32(bytes, 0);
         }
 
+        public static void WriteInt64(Stream stream, long value)
+        {
+            byte[] bytes = BitConverter.GetBytes(value);
+            stream.Write(bytes, 0, bytes.Length);
+        }
+
+        public static long ReadInt64(Stream stream)
+        {
+            byte[] bytes = new byte[sizeof(Int64)];
+            for (int i = 0; i < bytes.Length; ++i)
+            {
+                bytes[i] = (byte)stream.ReadByte();
+            }
+
+            return BitConverter.ToInt64(bytes, 0);
+        }
+
         public static void WriteString(Stream stream, string value)
         {
             byte[] data = Encoding.UTF8.GetBytes(value);
 
-            WriteInt(stream, data.Length);
+            WriteInt32(stream, data.Length);
             stream.Write(data, 0, data.Length);
         }
 
         public static string ReadString(Stream stream)
         {
-            int len = ReadInt(stream);
+            int len = ReadInt32(stream);
 
             byte[] dataBytes = new byte[len];
             for (int i = 0; i < len; ++i)

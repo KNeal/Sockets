@@ -21,7 +21,13 @@ namespace Sockets
 
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         private readonly Dictionary<string, Type> _messageTypes = new Dictionary<string, Type>();
-        
+
+        public SocketMessageHandler()
+        {
+            RegisterMessageType<PingMessage>("PingMessage");
+            RegisterMessageType<PongMessage>("PongMessage");
+        }
+
         public void RegisterMessageType<T>(string messageId)
         {
             _lock.EnterWriteLock();

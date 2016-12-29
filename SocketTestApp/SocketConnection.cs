@@ -4,7 +4,7 @@ using System.Net.Sockets;
 
 namespace Sockets
 {
-    public class SocketState
+    public class SocketConnection
     {
         public const int DefaultBufferLen = 1024;
 
@@ -13,7 +13,7 @@ namespace Sockets
         public MemoryStream MemoryStream { get; private set; }
         public DateTime LastMessageTime { get; set; }
 
-        public SocketState(Socket socket, int bufferLen = DefaultBufferLen)
+        public SocketConnection(Socket socket, int bufferLen = DefaultBufferLen)
         {
             Socket = socket;
             Buffer = new byte[DefaultBufferLen];

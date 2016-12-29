@@ -12,8 +12,8 @@ namespace CalculatorClientApp
     {
         private static void InteractiveClient()
         {
-            CalculatorClient client = new CalculatorClient();
-            client.Start(Dns.GetHostName(), 5000);
+            CalculatorClient client = new CalculatorClient(Dns.GetHostName(), 5000);
+            client.Start();
 
             while (true)
             {
@@ -52,13 +52,17 @@ namespace CalculatorClientApp
         {
             CalculatorServer server = new CalculatorServer();
             server.Start(5000);
-            
-            CalculatorClient client = new CalculatorClient();
-            client.Start(Dns.GetHostName(), 5000);
+
+            CalculatorClient client = new CalculatorClient(Dns.GetHostName(), 5000);
+            client.Start();
 
             Thread.Sleep(1000);
 
             client.Add(1, 3);
+            Thread.Sleep(2000);
+
+            client.Multiply(5, 2);
+            Thread.Sleep(2000);
 
             Console.ReadLine();
         }

@@ -30,6 +30,10 @@ namespace Calculator
             {
                 OnMultiply(clientId, (MultiplyMessage)message);
             }
+            else if (message is PingMessage)
+            {
+                // Ignore
+            }
             else
             {
                 OnError(clientId, string.Format("[CalculatorServer] Unknown message type: {0}", message.GetType().FullName));

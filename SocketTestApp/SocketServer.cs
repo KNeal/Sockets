@@ -12,7 +12,7 @@ namespace Sockets
     {
         private ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         private Socket _socket;
-        private Dictionary<int, Client> _clients = new Dictionary<int, Client>(); 
+        private Dictionary<int, Connection> _clients = new Dictionary<int, Connection>(); 
         
         public void Start(int port)
         {
@@ -56,16 +56,16 @@ namespace Sockets
 
         public void SendMessage(int clientId, ISocketMessage message)
         {
-            Client client;
-            if (_clients.TryGetValue(clientId, out client))
+            Connection connection;
+            if (_clients.TryGetValue(clientId, out connection))
             {
-                WriteMessage(client.Socket, message);
+                WriteMessage(connection.Socket, message);
             }
         }
 
         public void SendMessageToAllClients(ISocketMessage message)
         {
-            foreach (Client client in _clients.Values)
+            foreach (Connection client in _clients.Values)
             {
                 WriteMessage(client.Socket, message);
             }
@@ -78,17 +78,14 @@ namespace Sockets
         #region Private Classes
 
         private const int ClientReadBufferLen = 1024;
-        public class Client : ISocketClient
+        public class Connection : SocketConnection, ISocketClient
         {
-            public Socket Socket;
-            public byte[] ReadBuffer = new byte[ClientReadBufferLen];
-            public MemoryStream ReadMemoryStream = new MemoryStream();
-
             public int ClientId { get; set; }
-
             public string ClientName { get; set; }
 
-            public DateTime LastActiveTime { get; set; }
+            public Connection(Socket socket, int bufferLen = DefaultBufferLen) : base(socket, bufferLen)
+            {
+            }
         }
 
         #endregion
@@ -123,65 +120,73 @@ namespace Sockets
             Socket clientSocket = listener.EndAccept(ar);
 
             Console.WriteLine("Client connected from at {0}", clientSocket.RemoteEndPoint);
-
-
+            
             // Create the new client
-            Client client = new Client()
+            Connection connection = new Connection(clientSocket)
             {
-                Socket = clientSocket,
                 ClientId = clientId++
             };
-            client.Socket.BeginReceive(client.ReadBuffer, 0, client.ReadBuffer.Length, 0,
-                OnClientRecieve, client);
+            connection.Socket.BeginReceive(connection.Buffer, 0, connection.Buffer.Length, 0, OnClientRecieve, connection);
 
              _lock.EnterWriteLock();
             
-            AddClient(client);
-            OnClientConnected(client);
+            AddClient(connection);
+            OnClientConnected(connection);
         }
 
         public void OnClientRecieve(IAsyncResult ar)
         {
-            Client client = (Client)ar.AsyncState;
-            if (client == null)
+            Connection connection = (Connection)ar.AsyncState;
+            if (connection == null)
             {
                 return;
             }
-            
-            // Update the last message time
-            client.LastActiveTime = DateTime.UtcNow;
 
-            // Read data from the client socket. 
-            int bytesRead = client.Socket.EndReceive(ar);
-            if (bytesRead > 0)
+            try
             {
-                // There  might be more data, so store the data received so far.
-                client.ReadMemoryStream.Write(client.ReadBuffer, 0, bytesRead);
+                // Update the last message time
+                connection.LastMessageTime = DateTime.UtcNow;
 
-                if (IsEndOfMessage(client.ReadBuffer, bytesRead))
+                // Read data from the client socket. 
+                int bytesRead = connection.Socket.EndReceive(ar);
+                if (bytesRead > 0)
                 {
-                    ISocketMessage message = ReadMessage(client.ReadMemoryStream);
-                    client.ReadMemoryStream.SetLength(0);
+                    // There  might be more data, so store the data received so far.
+                    connection.MemoryStream.Write(connection.Buffer, 0, bytesRead);
 
-                    // Trigger the callback.
-                    if (message != null)
+                    if (IsEndOfMessage(connection.Buffer, bytesRead))
                     {
-                        OnMessage(client.ClientId, message);
+                        ISocketMessage message = ReadMessage(connection.MemoryStream);
+                        connection.MemoryStream.SetLength(0);
+
+                        // Trigger the callback.
+                        if (message != null)
+                        {
+                            if (message is PingMessage)
+                            {
+                                WriteMessage(connection.Socket, new PongMessage((PingMessage)message));    
+                            }
+
+                            OnMessage(connection.ClientId, message);
+                        }
                     }
                 }
             }
+            catch (Exception e)
+            {
+                Console.WriteLine("[SocketServer] Error in recieving message: {0}", e.Message);
+            }
 
             // Continue Listening
-            client.Socket.BeginReceive(client.ReadBuffer, 0, client.ReadBuffer.Length, 0,
-                OnClientRecieve, client);
+            connection.Socket.BeginReceive(connection.Buffer, 0, connection.Buffer.Length, 0, OnClientRecieve, connection);
         }
 
-        private void AddClient(Client client)
+        private void AddClient(Connection connection)
         {
             _lock.EnterWriteLock();
             try
             {
-                _clients[client.ClientId] = client;
+                _clients[connection.ClientId] = connection;
             }
             finally
             {
