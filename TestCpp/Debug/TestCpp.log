@@ -1,0 +1,2 @@
+﻿TestCpp.obj : error LNK2019: unresolved external symbol "class std::shared_ptr<class Aws::GameLift::Outcome<class Aws::GameLift::Internal::GameLiftServerState *,class Aws::GameLift::GameLiftError> > __cdecl Aws::GameLift::Server::InitSDK(void)" (?InitSDK@Server@GameLift@Aws@@YA?AV?$shared_ptr@V?$Outcome@PAVGameLiftServerState@Internal@GameLift@Aws@@VGameLiftError@34@@GameLift@Aws@@@std@@XZ) referenced in function _wmain
+C:\Kristen\Dev\GitHub\SocketTestApp\Debug\TestCpp.exe : fatal error LNK1120: 1 unresolved externals
