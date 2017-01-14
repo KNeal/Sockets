@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\common\GameLiftCommonState.cpp">
@@ -18,6 +18,9 @@
     </ClCompile>
     <ClCompile Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\gamelift-server-sdk\source\aws\gamelift\server\GameLiftServerAPI_extern_c.cpp">
+      <Filter>Source Files\server</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -64,6 +67,9 @@
       <Filter>Header Files\aws\gamelift\server</Filter>
     </ClInclude>
     <ClInclude Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include\aws\gamelift\server\ProcessParameters.h">
+      <Filter>Header Files\aws\gamelift\server</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\gamelift-server-sdk\include\aws\gamelift\server\GameLiftServerAPI_extern_c.h">
       <Filter>Header Files\aws\gamelift\server</Filter>
     </ClInclude>
   </ItemGroup>

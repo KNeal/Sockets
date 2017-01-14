@@ -1,135 +1,22 @@
-﻿Build started 1/13/2017 9:46:34 PM.
-     1>Project "C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\gamelift-server-sdk\aws-cpp-sdk-gamelift-server.vcxproj" on node 4 (Rebuild target(s)).
-     1>CustomBuild:
-         Building Custom Rule C:/Kristen/Dev/GitHub/SocketTestApp/ext/aws/GameLiftServerSDK_3_1_1/gamelift-server-sdk/CMakeLists.txt
-         CMake does not need to re-run because C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\gamelift-server-sdk\CMakeFiles\generate.stamp is up-to-date.
-       ClCompile:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I"C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include" /I"C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include" /Zi /nologo /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"aws-cpp-sdk-gamelift-server.dir\Debug\\" /Fd"aws-cpp-sdk-gamelift-server.dir\Debug\vc120.pdb" /Gd /TP /errorReport:prompt "C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\common\GameLiftCommonState.cpp" "C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\AuxProxyMessageSender.cpp" "C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\GameLiftServerAPI.cpp" "C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\GameLiftServerState.cpp" "C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\Network.cpp" "C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc"
-         GameLiftCommonState.cpp
-         AuxProxyMessageSender.cpp
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/stubs/common.h(149): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-         GameLiftServerAPI.cpp
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/stubs/common.h(149): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-         GameLiftServerState.cpp
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/stubs/common.h(149): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-         Network.cpp
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/stubs/common.h(149): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-         sdk.pb.cc
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/stubs/common.h(149): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/io/coded_stream.h(1038): warning C4244: '=' : conversion from '__int64' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/io/coded_stream.h(1137): warning C4244: 'initializing' : conversion from '__int64' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/io/coded_stream.h(1234): warning C4244: 'return' : conversion from '__int64' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/wire_format_lite_inl.h(838): warning C4267: 'argument' : conversion from 'size_t' to 'google::protobuf::uint32', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/wire_format_lite_inl.h(839): warning C4267: 'return' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/wire_format_lite_inl.h(842): warning C4267: 'argument' : conversion from 'size_t' to 'google::protobuf::uint32', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/wire_format_lite_inl.h(843): warning C4267: 'return' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(532): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(586): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(611): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(1107): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(1160): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(1185): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(1484): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(1522): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(1542): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(1807): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(1824): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(1862): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(1872): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(1892): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(1903): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(2236): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(2253): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(2291): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(2301): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(2321): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(2332): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(2665): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(2682): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(2720): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(2730): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(2750): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(2761): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(3886): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(3930): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(3956): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(4291): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(4308): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(4325): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(4410): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(4420): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(4430): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(4466): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(4477): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(4488): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(5012): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(5029): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(5067): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(5077): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(5097): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc(5108): warning C4267: 'argument' : conversion from 'size_t' to 'int', possible loss of data
-     1>C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xutility(2132): warning C4996: 'std::_Copy_impl': Function call with parameters that may be unsafe - this call relies on the caller to check that the passed values are correct. To disable this warning, use -D_SCL_SECURE_NO_WARNINGS. See documentation on how to use Visual C++ 'Checked Iterators'
-                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xutility(2113) : see declaration of 'std::_Copy_impl'
-                 C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/repeated_field.h(1298) : see reference to function template instantiation '_OutIt std::copy<const Element*,Element*>(_InIt,_InIt,_OutIt)' being compiled
-                 with
-                 [
-                     _OutIt=google::protobuf::uint64 *
-         ,            Element=google::protobuf::uint64
-         ,            _InIt=const google::protobuf::uint64 *
-                 ]
-                 C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/repeated_field.h(1297) : while compiling class template member function 'void google::protobuf::internal::ElementCopier<Element,false>::operator ()(Element *,const Element *,int)'
-                 with
-                 [
-                     Element=google::protobuf::uint64
-                 ]
-                 C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/repeated_field.h(1290) : see reference to function template instantiation 'void google::protobuf::internal::ElementCopier<Element,false>::operator ()(Element *,const Element *,int)' being compiled
-                 with
-                 [
-                     Element=google::protobuf::uint64
-                 ]
-                 C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/repeated_field.h(1290) : see reference to class template instantiation 'google::protobuf::internal::ElementCopier<Element,false>' being compiled
-                 with
-                 [
-                     Element=google::protobuf::uint64
-                 ]
-                 C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/repeated_field.h(1289) : while compiling class template member function 'void google::protobuf::RepeatedField<google::protobuf::uint64>::CopyArray(Element *,const Element *,int)'
-                 with
-                 [
-                     Element=google::protobuf::uint64
-                 ]
-                 C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/repeated_field.h(1284) : see reference to function template instantiation 'void google::protobuf::RepeatedField<google::protobuf::uint64>::CopyArray(Element *,const Element *,int)' being compiled
-                 with
-                 [
-                     Element=google::protobuf::uint64
-                 ]
-                 C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/repeated_field.h(1283) : while compiling class template member function 'void google::protobuf::RepeatedField<google::protobuf::uint64>::MoveArray(Element *,Element *,int)'
-                 with
-                 [
-                     Element=google::protobuf::uint64
-                 ]
-                 C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/repeated_field.h(1257) : see reference to function template instantiation 'void google::protobuf::RepeatedField<google::protobuf::uint64>::MoveArray(Element *,Element *,int)' being compiled
-                 with
-                 [
-                     Element=google::protobuf::uint64
-                 ]
-                 C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/repeated_field.h(1221) : while compiling class template member function 'void google::protobuf::RepeatedField<google::protobuf::uint64>::Reserve(int)'
-                 C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/repeated_field.h(1061) : see reference to function template instantiation 'void google::protobuf::RepeatedField<google::protobuf::uint64>::Reserve(int)' being compiled
-                 C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/repeated_field.h(1006) : while compiling class template member function 'int google::protobuf::RepeatedField<google::protobuf::uint64>::size(void) const'
-                 C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/wire_format_lite_inl.h(278) : see reference to function template instantiation 'int google::protobuf::RepeatedField<google::protobuf::uint64>::size(void) const' being compiled
-                 C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/wire_format_lite_inl.h(258) : see reference to class template instantiation 'google::protobuf::RepeatedField<google::protobuf::uint64>' being compiled
-                 C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include\google/protobuf/wire_format_lite_inl.h(311) : see reference to function template instantiation 'bool google::protobuf::internal::WireFormatLite::ReadRepeatedFixedSizePrimitive<google::protobuf::uint64,TYPE_FIXED64>(int,google::protobuf::uint32,google::protobuf::io::CodedInputStream *,google::protobuf::RepeatedField<google::protobuf::uint64> *)' being compiled
-                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\xutility(2113) : see declaration of 'std::_Copy_impl'
-         Generating Code...
-       Lib:
-         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\Lib.exe /OUT:"C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\bin\aws-cpp-sdk-gamelift-server.lib" /NOLOGO /MACHINE:X64  /machine:x64 "aws-cpp-sdk-gamelift-server.dir\Debug\GameLiftCommonState.obj"
+﻿Build started 1/14/2017 10:27:08 AM.
+     1>Project "C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\gamelift-server-sdk\aws-cpp-sdk-gamelift-server.vcxproj" on node 3 (Build target(s)).
+     1>ClCompile:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\CL.exe /c /I"C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include" /I"C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include" /Zi /nologo /W3 /WX- /Od /Ob0 /D WIN32 /D _WINDOWS /D _DEBUG /D "CMAKE_INTDIR=\"Debug\"" /D USE_IMPORT_EXPORT /D AWS_GAMELIFT_EXPORTS /D _WINDLL /D _MBCS /Gm- /EHsc /RTC1 /MDd /GS /fp:precise /Zc:wchar_t /Zc:forScope /GR /Fo"aws-cpp-sdk-gamelift-server.dir\Debug\\" /Fd"aws-cpp-sdk-gamelift-server.dir\Debug\vc120.pdb" /Gd /TP /errorReport:prompt "..\..\gamelift-server-sdk\source\aws\gamelift\server\GameLiftServerAPI_extern_c.cpp"
+         GameLiftServerAPI_extern_c.cpp
+     1>..\..\gamelift-server-sdk\source\aws\gamelift\server\GameLiftServerAPI_extern_c.cpp(45): warning C4996: 'strncpy': This function or variable may be unsafe. Consider using strncpy_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+                 C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\include\string.h(195) : see declaration of 'strncpy'
+       Link:
+         C:\Program Files (x86)\Microsoft Visual Studio 12.0\VC\bin\x86_amd64\link.exe /ERRORREPORT:PROMPT /OUT:"C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\bin\aws-cpp-sdk-gamelift-server.dll" /NOLOGO /LIBPATH:"C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\libs\debug" protobuf.lib sioclient.lib boost_system.lib boost_random.lib boost_date_time.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib /MANIFEST /MANIFESTUAC:"level='asInvoker' uiAccess='false'" /manifest:embed /PDB:"C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\bin\aws-cpp-sdk-gamelift-server.pdb" /TLBID:1 /DYNAMICBASE /NXCOMPAT /IMPLIB:"C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\bin\aws-cpp-sdk-gamelift-server.lib" /MACHINE:X64 /DLL "aws-cpp-sdk-gamelift-server.dir\Debug\GameLiftServerAPI_extern_c.obj"
+         "aws-cpp-sdk-gamelift-server.dir\Debug\GameLiftCommonState.obj"
          "aws-cpp-sdk-gamelift-server.dir\Debug\AuxProxyMessageSender.obj"
          "aws-cpp-sdk-gamelift-server.dir\Debug\GameLiftServerAPI.obj"
          "aws-cpp-sdk-gamelift-server.dir\Debug\GameLiftServerState.obj"
          "aws-cpp-sdk-gamelift-server.dir\Debug\Network.obj"
          "aws-cpp-sdk-gamelift-server.dir\Debug\sdk.pb.obj"
-         aws-cpp-sdk-gamelift-server.vcxproj -> C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\bin\aws-cpp-sdk-gamelift-server.lib
-     1>Done Building Project "C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\gamelift-server-sdk\aws-cpp-sdk-gamelift-server.vcxproj" (Rebuild target(s)).
+            Creating library C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\bin\aws-cpp-sdk-gamelift-server.lib and object C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\bin\aws-cpp-sdk-gamelift-server.exp
+         aws-cpp-sdk-gamelift-server.vcxproj -> C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\bin\aws-cpp-sdk-gamelift-server.dll
+     1>Done Building Project "C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\gamelift-server-sdk\aws-cpp-sdk-gamelift-server.vcxproj" (Build target(s)).
 
 Build succeeded.
 
-Time Elapsed 00:00:08.85
+Time Elapsed 00:00:01.85

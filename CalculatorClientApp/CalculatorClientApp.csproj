@@ -49,7 +49,7 @@
       <Project>{3EB9D762-B685-46E6-A629-9267FB9AC648}</Project>
       <Name>Calculator</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SocketTestApp\Sockets.csproj">
+    <ProjectReference Include="..\Sockets\Sockets.csproj">
       <Project>{3D4048E9-EC1A-4108-893E-D43B155BACE0}</Project>
       <Name>Sockets</Name>
     </ProjectReference>

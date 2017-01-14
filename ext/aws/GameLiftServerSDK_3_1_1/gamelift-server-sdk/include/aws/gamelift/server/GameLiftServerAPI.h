@@ -18,7 +18,6 @@
 #include <aws/gamelift/server/ProcessParameters.h>
 #include <future>
 
-
 /* The GameLiftServerAPI contains methods that should be used by the server executable you upload to GameLift. */
 
 
@@ -35,11 +34,15 @@ namespace Server
     typedef Aws::GameLift::Outcome<Aws::GameLift::Internal::GameLiftServerState*, GameLiftError> InitSDKOutcome;
     typedef Aws::GameLift::Outcome<std::vector<std::string>, GameLiftError> GetExpectedPlayerSessionIDsOutcome;
     typedef Aws::GameLift::Outcome<std::vector<std::string>, GameLiftError> GetConnectedPlayerSessionIDsOutcome;
+	
+	typedef std::shared_ptr<InitSDKOutcome> InitSDKOutcomeSharedPtr;
+	typedef std::shared_ptr<GetExpectedPlayerSessionIDsOutcome> GetExpectedPlayerSessionIDsOutcomeSharedPtr;
+	typedef std::shared_ptr<GetConnectedPlayerSessionIDsOutcome> GetConnectedPlayerSessionIDsOutcomeSharedPtr;
 
     /**
     @return The current SDK version.
     */
-    AWS_GAMELIFT_API AwsStringOutcome GetSdkVersion();
+    AWS_GAMELIFT_API AwsStringOutcomeSharedPtr GetSdkVersion();
 
     /**
     Initializes the GameLift server.

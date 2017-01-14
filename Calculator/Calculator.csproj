@@ -48,7 +48,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SocketTestApp\Sockets.csproj">
+    <ProjectReference Include="..\Sockets\Sockets.csproj">
       <Project>{3D4048E9-EC1A-4108-893E-D43B155BACE0}</Project>
       <Name>Sockets</Name>
     </ProjectReference>
