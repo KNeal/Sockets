@@ -1,0 +1,294 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGUID>{D885381B-FEB1-33A5-9317-C4C05375F44D}</ProjectGUID>
+    <Keyword>Win32Proj</Keyword>
+    <Platform>x64</Platform>
+    <ProjectName>aws-cpp-sdk-gamelift-server</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v120</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+    <PropertyGroup>
+      <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\bin\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">aws-cpp-sdk-gamelift-server.dir\Debug\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">aws-cpp-sdk-gamelift-server</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.lib</TargetExt>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\bin\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">aws-cpp-sdk-gamelift-server.dir\Release\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">aws-cpp-sdk-gamelift-server</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.lib</TargetExt>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\bin\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">aws-cpp-sdk-gamelift-server.dir\MinSizeRel\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">aws-cpp-sdk-gamelift-server</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.lib</TargetExt>
+      <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\bin\</OutDir>
+      <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">aws-cpp-sdk-gamelift-server.dir\RelWithDebInfo\</IntDir>
+      <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">aws-cpp-sdk-gamelift-server</TargetName>
+      <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.lib</TargetExt>
+    </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include;C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;CMAKE_INTDIR="Debug";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;CMAKE_INTDIR=\"Debug\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include;C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include;C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions> /machine:x64 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include;C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>Release/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="Release";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"Release\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include;C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include;C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions> /machine:x64 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include;C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>MinSizeRel/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="MinSizeRel";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"MinSizeRel\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include;C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include;C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions> /machine:x64 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include;C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AssemblerListingLocation>RelWithDebInfo/</AssemblerListingLocation>
+      <CompileAs>CompileAsCpp</CompileAs>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <WarningLevel>Level3</WarningLevel>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR="RelWithDebInfo";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;CMAKE_INTDIR=\"RelWithDebInfo\";%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include;C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include;C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\3rdParty\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions> /machine:x64 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\CMakeLists.txt">
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule C:/Kristen/Dev/GitHub/SocketTestApp/ext/aws/GameLiftServerSDK_3_1_1/gamelift-server-sdk/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+C:\Kristen\Dev\Software\cmake-3.7.2-win64-x64\bin\cmake.exe -HC:/Kristen/Dev/GitHub/SocketTestApp/ext/aws/GameLiftServerSDK_3_1_1 -BC:/Kristen/Dev/GitHub/SocketTestApp/ext/aws/GameLiftServerSDK_3_1_1/build --check-stamp-file C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\gamelift-server-sdk\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:/Kristen/Dev/GitHub/SocketTestApp/ext/aws/GameLiftServerSDK_3_1_1/gamelift-server-sdk/CMakeLists.txt;C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\CMakeLists.txt;C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\gamelift-server-sdk\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule C:/Kristen/Dev/GitHub/SocketTestApp/ext/aws/GameLiftServerSDK_3_1_1/gamelift-server-sdk/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+C:\Kristen\Dev\Software\cmake-3.7.2-win64-x64\bin\cmake.exe -HC:/Kristen/Dev/GitHub/SocketTestApp/ext/aws/GameLiftServerSDK_3_1_1 -BC:/Kristen/Dev/GitHub/SocketTestApp/ext/aws/GameLiftServerSDK_3_1_1/build --check-stamp-file C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\gamelift-server-sdk\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:/Kristen/Dev/GitHub/SocketTestApp/ext/aws/GameLiftServerSDK_3_1_1/gamelift-server-sdk/CMakeLists.txt;C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\CMakeLists.txt;C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\gamelift-server-sdk\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule C:/Kristen/Dev/GitHub/SocketTestApp/ext/aws/GameLiftServerSDK_3_1_1/gamelift-server-sdk/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+C:\Kristen\Dev\Software\cmake-3.7.2-win64-x64\bin\cmake.exe -HC:/Kristen/Dev/GitHub/SocketTestApp/ext/aws/GameLiftServerSDK_3_1_1 -BC:/Kristen/Dev/GitHub/SocketTestApp/ext/aws/GameLiftServerSDK_3_1_1/build --check-stamp-file C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\gamelift-server-sdk\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:/Kristen/Dev/GitHub/SocketTestApp/ext/aws/GameLiftServerSDK_3_1_1/gamelift-server-sdk/CMakeLists.txt;C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\CMakeLists.txt;C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\gamelift-server-sdk\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule C:/Kristen/Dev/GitHub/SocketTestApp/ext/aws/GameLiftServerSDK_3_1_1/gamelift-server-sdk/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+C:\Kristen\Dev\Software\cmake-3.7.2-win64-x64\bin\cmake.exe -HC:/Kristen/Dev/GitHub/SocketTestApp/ext/aws/GameLiftServerSDK_3_1_1 -BC:/Kristen/Dev/GitHub/SocketTestApp/ext/aws/GameLiftServerSDK_3_1_1/build --check-stamp-file C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\gamelift-server-sdk\CMakeFiles\generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:/Kristen/Dev/GitHub/SocketTestApp/ext/aws/GameLiftServerSDK_3_1_1/gamelift-server-sdk/CMakeLists.txt;C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\CMakeLists.txt;C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\CMakeLists.txt;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\gamelift-server-sdk\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include\aws\gamelift\internal\network\AuxProxyMessageHandler.h" />
+    <ClInclude Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include\aws\gamelift\internal\network\AuxProxyMessageSender.h" />
+    <ClInclude Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include\aws\gamelift\internal\network\Network.h" />
+    <ClInclude Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include\aws\gamelift\internal\GameLiftCommonState.h" />
+    <ClInclude Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include\aws\gamelift\internal\GameLiftServerState.h" />
+    <ClInclude Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include\aws\gamelift\common\GameLiftErrors.h" />
+    <ClInclude Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include\aws\gamelift\common\GameLift_EXPORTS.h" />
+    <ClInclude Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include\aws\gamelift\common\Outcome.h" />
+    <ClInclude Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include\aws\gamelift\server\model\GameProperty.h" />
+    <ClInclude Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include\aws\gamelift\server\model\GameSession.h" />
+    <ClInclude Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include\aws\gamelift\server\model\GameSessionStatus.h" />
+    <ClInclude Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include\aws\gamelift\server\model\PlayerSessionCreationPolicy.h" />
+    <ClInclude Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include\aws\gamelift\server\GameLiftServerAPI.h" />
+    <ClInclude Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include\aws\gamelift\server\LogParameters.h" />
+    <ClInclude Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include\aws\gamelift\server\ProcessParameters.h" />
+    <ClCompile Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\common\GameLiftCommonState.cpp"  />
+    <ClCompile Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\AuxProxyMessageSender.cpp"  />
+    <ClCompile Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\GameLiftServerAPI.cpp"  />
+    <ClCompile Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\GameLiftServerState.cpp"  />
+    <ClCompile Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\Network.cpp"  />
+    <ClCompile Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc"  />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="C:/Kristen/Dev/GitHub/SocketTestApp/ext/aws/GameLiftServerSDK_3_1_1/build/ZERO_CHECK.vcxproj">
+      <Project>EC047150-C028-35B3-AFD5-5BFE9A2F5F35</Project>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

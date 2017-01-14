@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <CustomBuild Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\CMakeFiles\2a39a6988dadab857c8422a54e0fa150\generate.stamp.rule">
+      <Filter>CMake Rules</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="CMake Rules">
+      <UniqueIdentifier>{31FD0FCE-F20D-3EDE-A017-5CFFF3CA94AE}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

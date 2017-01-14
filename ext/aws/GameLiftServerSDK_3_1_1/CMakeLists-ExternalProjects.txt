@@ -1,0 +1,114 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+include(ExternalProject)
+
+set(GameLift_Args "-DBUILD_SHARED_LIBS:BOOL=${BUILD_SHARED_LIBS}")
+list(APPEND GameLift_Args "-DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}")
+list(APPEND GameLift_Args "-DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}")
+message("GameLift_Args ${GameLift_Args}")
+
+#Building protobuf in two steps.
+#One step to download the source and then another step to build it.
+#Once we have built the package, we use protoc to regenerate our protobuf files (.pb.h and .pb.cc.)
+message("External project - Protobuf")
+externalProject_Add(
+  protobuf-src
+  PREFIX ${CMAKE_SOURCE_DIR}/3rdParty/protobuf
+  URL https://github.com/google/protobuf/releases/download/v3.1.0/protobuf-cpp-3.1.0.tar.gz
+  UPDATE_COMMAND ""
+  PATCH_COMMAND ""
+  INSTALL_COMMAND ""
+  CONFIGURE_COMMAND ""
+  BUILD_COMMAND ""
+)
+
+set(PROTOBUF_INCLUDE_DIR "${CMAKE_SOURCE_DIR}/3rdParty/protobuf/src/protobuf-src/src")
+
+externalProject_Add(
+  protobuf
+  DEPENDS protobuf-src
+  PREFIX ${CMAKE_SOURCE_DIR}/3rdParty/protobuf
+  DOWNLOAD_COMMAND ""
+  SOURCE_DIR ${CMAKE_SOURCE_DIR}/3rdParty/protobuf/src/protobuf-src/cmake
+  UPDATE_COMMAND ""
+  PATCH_COMMAND ""
+  INSTALL_COMMAND ""
+  CONFIGURE_COMMAND <SOURCE_DIR>/../configure --prefix=<INSTALL_DIR>
+)
+
+#generating protobuf files.
+add_custom_command(
+   TARGET protobuf POST_BUILD
+   COMMAND ${CMAKE_SOURCE_DIR}/3rdParty/protobuf/src/protobuf-build/src/protoc -I=${CMAKE_SOURCE_DIR}/gamelift-server-sdk/source
+   --cpp_out=${CMAKE_SOURCE_DIR}/gamelift-server-sdk/source
+   ${CMAKE_SOURCE_DIR}/gamelift-server-sdk/source/aws/gamelift/server/protocols/sdk.proto
+   COMMAND ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/gamelift-server-sdk/source/aws/gamelift/server/protocols/sdk.pb.h ${CMAKE_SOURCE_DIR}/gamelift-server-sdk/include/aws/gamelift/server/protocols/sdk.pb.h
+)
+
+#Boost
+set(Boost_b2_Command ./b2)
+if(UNIX)
+  set(Boost_Bootstrap_Command ./bootstrap.sh)
+  if(CMAKE_CXX_COMPILER_ID MATCHES Clang)
+    set(Boost_Toolchain clang)
+  endif()
+endif()
+
+Set(Boost_Version 1.61.0)
+string(REPLACE "." "_" Boost_Version_Underscore ${Boost_Version})
+externalProject_Add(
+  boost-ext
+  PREFIX ${CMAKE_SOURCE_DIR}/3rdParty/boost
+  URL http://download.sourceforge.net/project/boost/boost/${Boost_Version}/boost_${Boost_Version_Underscore}.zip
+  BUILD_IN_SOURCE 1
+  UPDATE_COMMAND ""
+  PATCH_COMMAND ""
+  INSTALL_COMMAND ""
+  CONFIGURE_COMMAND ${Boost_Bootstrap_Command}
+  BUILD_COMMAND ${Boost_b2_Command} stage
+  --with-system
+  --with-date_time
+  --with-random
+  --link=static
+  --runtime-link=shared
+  --variant=release
+  --threading=multi
+  --address-model=64
+  --architecture=x86
+  --layout=system
+  --toolchain=${Boost_Toolchain}
+)
+
+message("External project - socket.io-client-cpp")
+externalProject_Add(
+  socketIO-ext
+  DEPENDS boost-ext
+  PREFIX ${CMAKE_SOURCE_DIR}/3rdParty/sioclient
+  GIT_REPOSITORY https://github.com/socketio/socket.io-client-cpp.git
+  GIT_TAG 1.6.1
+  GIT_SUBMODULES
+  lib/websocketpp
+  lib/rapidjson
+  UPDATE_COMMAND ""
+  PATCH_COMMAND ""
+  INSTALL_COMMAND ""
+  CMAKE_CACHE_ARGS "-DCMAKE_POSITION_INDEPENDENT_CODE:BOOL=true"
+  CMAKE_ARGS
+  -DBoost_INCLUDE_DIR=${CMAKE_SOURCE_DIR}/3rdParty/boost/src/boost-ext
+  -DBOOST_LIBRARYDIR=${CMAKE_SOURCE_DIR}/3rdParty/boost/src/boost-ext/stage/lib
+  -DBOOST_VER=1.61
+  -DBoost_USE_STATIC_LIBS=0
+  -DBUILD_SHARED_LIBS=0
+)
+
+SET(SOCKET_IO_CLIENT_INCLUDE_DIR ${CMAKE_SOURCE_DIR}/3rdParty/sioclient/src/socketIO-ext/src)
+
+message("External project - gamelift-server-sdk")
+externalProject_Add(
+  gamelift-server-sdk
+  DEPENDS socketIO-ext protobuf
+  SOURCE_DIR ${CMAKE_SOURCE_DIR}/gamelift-server-sdk
+  UPDATE_COMMAND ""
+  PATCH_COMMAND ""
+  INSTALL_COMMAND ""
+  CMAKE_ARGS ${GameLift_Args}
+)

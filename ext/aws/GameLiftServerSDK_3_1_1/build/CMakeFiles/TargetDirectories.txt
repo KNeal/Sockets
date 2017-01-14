@@ -1,0 +1,4 @@
+C:/Kristen/Dev/GitHub/SocketTestApp/ext/aws/GameLiftServerSDK_3_1_1/build/CMakeFiles/ALL_BUILD.dir
+C:/Kristen/Dev/GitHub/SocketTestApp/ext/aws/GameLiftServerSDK_3_1_1/build/CMakeFiles/ZERO_CHECK.dir
+C:/Kristen/Dev/GitHub/SocketTestApp/ext/aws/GameLiftServerSDK_3_1_1/build/gamelift-server-sdk/CMakeFiles/aws-cpp-sdk-gamelift-server.dir
+C:/Kristen/Dev/GitHub/SocketTestApp/ext/aws/GameLiftServerSDK_3_1_1/build/gamelift-server-sdk/CMakeFiles/ALL_BUILD.dir
