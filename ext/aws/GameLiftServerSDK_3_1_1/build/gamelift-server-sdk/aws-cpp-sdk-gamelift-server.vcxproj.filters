@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="UTF-8"?>
 <Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\common\GameLiftCommonState.cpp">
@@ -10,6 +10,9 @@
     <ClCompile Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\GameLiftServerAPI.cpp">
       <Filter>Source Files\server</Filter>
     </ClCompile>
+    <ClCompile Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\GameLiftServerAPI_extern_c.cpp">
+      <Filter>Source Files\server</Filter>
+    </ClCompile>
     <ClCompile Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\GameLiftServerState.cpp">
       <Filter>Source Files\server</Filter>
     </ClCompile>
@@ -18,9 +21,6 @@
     </ClCompile>
     <ClCompile Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\source\aws\gamelift\server\protocols\sdk.pb.cc">
       <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\gamelift-server-sdk\source\aws\gamelift\server\GameLiftServerAPI_extern_c.cpp">
-      <Filter>Source Files\server</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -63,13 +63,13 @@
     <ClInclude Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include\aws\gamelift\server\GameLiftServerAPI.h">
       <Filter>Header Files\aws\gamelift\server</Filter>
     </ClInclude>
+    <ClInclude Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include\aws\gamelift\server\GameLiftServerAPI_extern_c.h">
+      <Filter>Header Files\aws\gamelift\server</Filter>
+    </ClInclude>
     <ClInclude Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include\aws\gamelift\server\LogParameters.h">
       <Filter>Header Files\aws\gamelift\server</Filter>
     </ClInclude>
     <ClInclude Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\include\aws\gamelift\server\ProcessParameters.h">
-      <Filter>Header Files\aws\gamelift\server</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\gamelift-server-sdk\include\aws\gamelift\server\GameLiftServerAPI_extern_c.h">
       <Filter>Header Files\aws\gamelift\server</Filter>
     </ClInclude>
   </ItemGroup>
@@ -77,6 +77,15 @@
     <CustomBuild Include="C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\gamelift-server-sdk\CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
+    <Filter Include="Header Files\aws">
+      <UniqueIdentifier>{8893DF91-A6A3-310D-AA26-9EA32B9E4EE6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\common">
+      <UniqueIdentifier>{B9B4C00D-2F91-3EF4-A1D7-57CFF92FC413}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\server">
+      <UniqueIdentifier>{9826DC0E-7338-34A1-A612-D3AE0648BC12}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Header Files\aws\gamelift\common">
       <UniqueIdentifier>{52483D6C-4270-3144-9DDB-BF7A26FF3B99}</UniqueIdentifier>
     </Filter>
@@ -86,6 +95,12 @@
     <Filter Include="Header Files\aws\gamelift\internal">
       <UniqueIdentifier>{3ECA1A08-6D77-3CD1-8774-63B537FFBE2D}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\aws\gamelift\server\model">
+      <UniqueIdentifier>{F1F5DB4B-1F7E-36D3-BE10-A545DD17836D}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\aws\gamelift">
+      <UniqueIdentifier>{960433E1-AC50-37E0-A3D2-7BA28D82CD85}</UniqueIdentifier>
+    </Filter>
     <Filter Include="Source Files">
       <UniqueIdentifier>{7506C8B0-FB23-33BF-BD2C-77AD4B3F2E11}</UniqueIdentifier>
     </Filter>
@@ -94,21 +109,6 @@
     </Filter>
     <Filter Include="Header Files\aws\gamelift\internal\network">
       <UniqueIdentifier>{13CBE20C-02C6-3B0A-BB53-D3D82C549436}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\aws\gamelift">
-      <UniqueIdentifier>{960433E1-AC50-37E0-A3D2-7BA28D82CD85}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\aws">
-      <UniqueIdentifier>{8893DF91-A6A3-310D-AA26-9EA32B9E4EE6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Header Files\aws\gamelift\server\model">
-      <UniqueIdentifier>{F1F5DB4B-1F7E-36D3-BE10-A545DD17836D}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\common">
-      <UniqueIdentifier>{B9B4C00D-2F91-3EF4-A1D7-57CFF92FC413}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\server">
-      <UniqueIdentifier>{9826DC0E-7338-34A1-A612-D3AE0648BC12}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
