@@ -10,7 +10,12 @@ namespace Test
     {
         static void Main(string[] args)
         {
+            //GameLiftAPI.TestCallback();
             GameLiftAPI.GetSdkVersion();
+            //GameLiftAPI.InitSDK();
+
+            GameLiftServer server = new GameLiftServer();
+            server.Initialize();
         }
     }
 }

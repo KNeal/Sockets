@@ -119,8 +119,5 @@ namespace Aws
         typedef Outcome<void*, GameLiftError> GenericOutcome;
         typedef std::future<GenericOutcome> GenericOutcomeCallable;
         typedef Outcome<std::string, GameLiftError> AwsStringOutcome;
-
-		typedef std::shared_ptr<GenericOutcome> GenericOutcomeSharedPtr;
-		typedef std::shared_ptr<AwsStringOutcome> AwsStringOutcomeSharedPtr;
     } // namespace GameLift
 } // namespace Aws

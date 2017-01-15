@@ -62,7 +62,8 @@
       <AdditionalDependencies>protobuf.lib;sioclient.lib;boost_system.lib;boost_random.lib;boost_date_time.lib;aws-cpp-sdk-gamelift-server.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
-      <Command>XCOPY "$(SolutionDir)ext\aws\GameLiftServerSDK_3_1_1\build\bin\aws-cpp-sdk-gamelift-server.dll" "$(TargetDir)" /Y</Command>
+      <Command>XCOPY "$(SolutionDir)ext\aws\GameLiftServerSDK_3_1_1\build\bin\aws-cpp-sdk-gamelift-server.dll" "$(TargetDir)" /Y
+XCOPY "$(SolutionDir)ext\aws\GameLiftServerSDK_3_1_1\build\bin\aws-cpp-sdk-gamelift-server.pdb" "$(TargetDir)" /Y</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

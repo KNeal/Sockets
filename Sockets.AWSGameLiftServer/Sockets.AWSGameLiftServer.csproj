@@ -39,6 +39,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="GameLift\GameLiftAPI.cs" />
+    <Compile Include="GameLift\GameLiftErrorType.cs" />
+    <Compile Include="GameLift\GameLiftServer.cs" />
+    <Compile Include="GameLift\GameSession.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

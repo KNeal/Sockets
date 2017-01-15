@@ -46,7 +46,7 @@ Network::Network(sio::client* sioClient, AuxProxyMessageHandler* handler, AuxPro
     m_sio_client->set_reconnect_attempts(3);
     
     std::map<std::string, std::string> map;
-    map[sdkVersion] = Aws::GameLift::Server::GetSdkVersion()->GetResult().c_str();
+    map[sdkVersion] = Aws::GameLift::Server::GetSdkVersion().GetResult().c_str();
 #ifdef WIN32
     map[pid] = std::to_string(::GetCurrentProcessId());
 #else

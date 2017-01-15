@@ -17,9 +17,9 @@ using namespace Aws::GameLift;
 
 static const std::string sdkVersion = "3.1.1";
 
-Aws::GameLift::AwsStringOutcomeSharedPtr Server::GetSdkVersion()
+Aws::GameLift::AwsStringOutcome Server::GetSdkVersion()
 {
-	return std::make_shared<AwsStringOutcome>(sdkVersion);
+	return AwsStringOutcome(sdkVersion);
 }
 
 Server::InitSDKOutcome Server::InitSDK()
