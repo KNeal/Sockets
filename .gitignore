@@ -2,7 +2,7 @@
 */obj
 *.suo
 *.user
-
+*.opensdf
 ext/aws/GameLiftServerSDK_3_1_1/build/bin/
 ext/aws/GameLiftServerSDK_3_1_1/build/gamelift-server-sdk/aws-cpp-sdk-gamelift-server.dir/Debug/
 *.sdf

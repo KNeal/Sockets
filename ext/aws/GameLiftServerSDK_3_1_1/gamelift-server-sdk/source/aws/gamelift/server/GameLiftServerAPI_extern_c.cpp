@@ -5,7 +5,6 @@
 #include <fstream>
 #include <map>
 
-
 using namespace Aws::GameLift;
 using namespace Aws::GameLift::Server;
 using namespace Aws::GameLift::Server::Model;
@@ -39,6 +38,12 @@ public:
 	}
 };
 
+void Log(char* message)
+{
+	std::ofstream log("logfile.txt", std::ios_base::app | std::ios_base::out);
+	log << message << std::endl;
+}
+
 Cache<AwsStringOutcome> s_cacheAwsStringOutcome;
 Cache<InitSDKOutcome> s_cacheInitSDKOutcome;
 Cache<GenericOutcome> s_cacheGenericOutcome;
@@ -49,11 +54,12 @@ extern "C" extern AWS_GAMELIFT_API void test_callback(fnTestCallback callback)
 }
 
 // ---------------------------------------------------------------------------
-// aws_gamelift_server_API
+// Server API
 // ---------------------------------------------------------------------------
 
 extern "C" AWS_GAMELIFT_API void* aws_gamelift_server__API_GetSdkVersion()
 {
+	Log("[GameLiftServerAPI_extern_c] aws_gamelift_server__API_GetSdkVersion called");
 	AwsStringOutcome outcome = Server::GetSdkVersion();
 
 	return s_cacheAwsStringOutcome.Add(outcome);
@@ -61,11 +67,11 @@ extern "C" AWS_GAMELIFT_API void* aws_gamelift_server__API_GetSdkVersion()
 
 extern "C" AWS_GAMELIFT_API void* aws_gamelift_server__API_InitSDK()
 {
+	Log("[GameLiftServerAPI_extern_c] aws_gamelift_server__API_InitSDK called");
 	InitSDKOutcome outcome = Aws::GameLift::Server::InitSDK();
 
 	return s_cacheInitSDKOutcome.Add(outcome);
 }
-
 
 extern "C" AWS_GAMELIFT_API void* aws_gamelift_server__API_ProcessReady
 (	
@@ -76,18 +82,24 @@ extern "C" AWS_GAMELIFT_API void* aws_gamelift_server__API_ProcessReady
 	char* pLogPath
 )
 {
+	Log("[GameLiftServerAPI_extern_c] aws_gamelift_server__API_ProcessReady called");
+
+	// Wrap the callbacks in functions
 	std::function<void(GameSession)> fonGameStart = [onGameStart](Aws::GameLift::Server::Model::GameSession gameSession)
 	{
+		Log("[GameLiftServerAPI_extern_c] onGameStart called");
 		onGameStart(&gameSession);
 	};
 
 	std::function<void()> fonProcessTerminate = [onProcessTerminate]()
 	{
+		Log("[GameLiftServerAPI_extern_c] onProcessTerminate called");
 		onProcessTerminate();
 	};
 
 	std::function<bool()> fonHealthCheck = [onHealthCheck]()
 	{
+		Log("[GameLiftServerAPI_extern_c] onHealthCheck called");
 		return onHealthCheck();
 	};
 
@@ -98,7 +110,56 @@ extern "C" AWS_GAMELIFT_API void* aws_gamelift_server__API_ProcessReady
 	ProcessParameters processParams(fonGameStart, fonProcessTerminate, fonHealthCheck, port, logParams);
 
 	GenericOutcome outcome = Server::ProcessReady(processParams);
+	return s_cacheGenericOutcome.Add(outcome);
+}
 
+extern "C" AWS_GAMELIFT_API void* aws_gamelift_server__API_ProcessEnding()
+{
+	Log("[GameLiftServerAPI_extern_c] aws_gamelift_server__API_ProcessEnding called");
+	GenericOutcome outcome = Server::ProcessEnding();
+	return s_cacheGenericOutcome.Add(outcome);
+}
+
+extern "C" AWS_GAMELIFT_API void* aws_gamelift_server__API_ActivateGameSession()
+{
+	Log("[GameLiftServerAPI_extern_c] aws_gamelift_server__API_ActivateGameSession called");
+	GenericOutcome outcome = Server::ActivateGameSession();
+	return s_cacheGenericOutcome.Add(outcome);
+}
+
+extern "C" AWS_GAMELIFT_API void* aws_gamelift_server__API_TerminateGameSession()
+{
+	Log("[GameLiftServerAPI_extern_c] aws_gamelift_server__API_TerminateGameSession called");
+	GenericOutcome outcome = Server::TerminateGameSession();
+	return s_cacheGenericOutcome.Add(outcome);
+}
+
+extern "C" AWS_GAMELIFT_API void* aws_gamelift_server__API_GetGameSessionId()
+{
+	Log("[GameLiftServerAPI_extern_c] aws_gamelift_server__API_GetGameSessionId called");
+	AwsStringOutcome outcome = Server::GetGameSessionId();
+
+	return s_cacheAwsStringOutcome.Add(outcome);
+}
+
+extern "C" AWS_GAMELIFT_API void* aws_gamelift_server__API_AcceptPlayerSession(char *pPlayerSession)
+{
+	Log("[GameLiftServerAPI_extern_c] aws_gamelift_server__API_AcceptPlayerSession called");
+	GenericOutcome outcome = Server::AcceptPlayerSession(pPlayerSession);
+	return s_cacheGenericOutcome.Add(outcome);
+}
+
+extern "C" AWS_GAMELIFT_API void* aws_gamelift_server__API_RemovePlayerSession(char *pPlayerSession)
+{
+	Log("[GameLiftServerAPI_extern_c] aws_gamelift_server__API_RemovePlayerSession called");
+	GenericOutcome outcome = Server::RemovePlayerSession(pPlayerSession);
+	return s_cacheGenericOutcome.Add(outcome);
+}
+
+extern "C" AWS_GAMELIFT_API void* aws_gamelift_server__API_Destroy()
+{
+	Log("[GameLiftServerAPI_extern_c] aws_gamelift_server__API_Destroy called");
+	GenericOutcome outcome = Server::Destroy();
 	return s_cacheGenericOutcome.Add(outcome);
 }
 
@@ -128,7 +189,7 @@ extern "C" AWS_GAMELIFT_API void aws_gamelift__AwsGenericOutcome_GetErrorMessage
 }
 
 // ---------------------------------------------------------------------------
-// aws_gamelift__AwsStringOutcome
+// AwsStringOutcome
 // ---------------------------------------------------------------------------
 
 extern "C" extern AWS_GAMELIFT_API void aws_gamelift__AwsStringOutcome_Delete(Aws::GameLift::AwsStringOutcome* pOutcome)
@@ -159,7 +220,7 @@ extern "C" AWS_GAMELIFT_API void aws_gamelift__AwsStringOutcome_GetString(Aws::G
 }
 
 // ---------------------------------------------------------------------------
-// aws_gamelift__InitSDKOutcome
+// InitSDKOutcome
 // ---------------------------------------------------------------------------
 
 extern "C" extern AWS_GAMELIFT_API void aws_gamelift__InitSDKOutcome_Delete(Aws::GameLift::Server::InitSDKOutcome* pOutcome)
@@ -191,7 +252,7 @@ extern "C" AWS_GAMELIFT_API void* aws_gamelift__InitSDKOutcome_GetServerState(Aw
 }
 
 // ---------------------------------------------------------------------------
-// aws_gamelift__GameSession
+// GameSession
 // ---------------------------------------------------------------------------
 
 extern "C" AWS_GAMELIFT_API void aws_gamelift__GameSession_GetGameSessionId(Aws::GameLift::Server::Model::GameSession* pGameSession, int bufferLen, char* pBuffer)

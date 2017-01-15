@@ -20,6 +20,13 @@ extern "C"
 																		FuncOnProcessTerminate onProcessTerminate, 
 																		FuncOnHealthCheck onHealthCheck, 
 																		int port, char* pLogPath);
+	extern AWS_GAMELIFT_API void* aws_gamelift_server__API_ProcessEnding();
+	extern AWS_GAMELIFT_API void* aws_gamelift_server__API_ActivateGameSession();
+	extern AWS_GAMELIFT_API void* aws_gamelift_server__API_TerminateGameSession();
+	extern AWS_GAMELIFT_API void* aws_gamelift_server__API_GetGameSessionId();
+	extern AWS_GAMELIFT_API void* aws_gamelift_server__API_AcceptPlayerSession(char *pPlayerSession);
+	extern AWS_GAMELIFT_API void* aws_gamelift_server__API_RemovePlayerSession(char *pPlayerSession);
+	extern AWS_GAMELIFT_API void* aws_gamelift_server__API_Destroy();
 
 	// GenericOutcome
 	extern AWS_GAMELIFT_API void aws_gamelift__AwsGenericOutcome_Delete(Aws::GameLift::GenericOutcome* pOutcome);
