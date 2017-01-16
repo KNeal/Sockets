@@ -43,20 +43,27 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BinaryUtils.cs" />
+    <Compile Include="Messages\AuthResponseMessage.cs" />
+    <Compile Include="AuthResult.cs" />
+    <Compile Include="Utils\BinaryUtils.cs" />
+    <Compile Include="Messages\AuthRequestMessage.cs" />
+    <Compile Include="IClientCredentials.cs" />
     <Compile Include="ISocketClient.cs" />
     <Compile Include="ISocketConnection.cs" />
     <Compile Include="ISocketMessage.cs" />
     <Compile Include="ISocketMessageHandler.cs" />
     <Compile Include="ISocketServer.cs" />
-    <Compile Include="PingMessage.cs" />
-    <Compile Include="PongMessage.cs" />
+    <Compile Include="Messages\PingRequestMessage.cs" />
+    <Compile Include="Messages\PingResponseMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SocketMessage.cs" />
+    <Compile Include="Messages\SocketMessage.cs" />
     <Compile Include="SocketMessageHandler.cs" />
     <Compile Include="SocketClient.cs" />
     <Compile Include="SocketServer.cs" />
     <Compile Include="SocketConnection.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Server\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

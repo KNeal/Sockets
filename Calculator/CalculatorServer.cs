@@ -1,5 +1,6 @@
 using System;
 using Sockets;
+using Sockets.Messages;
 
 namespace Calculator
 {
@@ -7,7 +8,14 @@ namespace Calculator
     {
         public CalculatorServer()
         {
-            CalculatorUtils.RegisterMessages(this);
+            RegisterMessageType<AddMessage>("AddMessage", OnAdd);
+            RegisterMessageType<MultiplyMessage>("MultiplyMessage", OnMultiply);
+            RegisterMessageType<PingRequestMessage>("PingRequestMessage", OnPingRequest);
+        }
+
+        protected override AuthResult AuthenticateClient(string userName, string userToken)
+        {
+            return AuthResult.Pass();
         }
 
         protected override void OnClientConnected(ISocketClient client)
@@ -19,28 +27,13 @@ namespace Calculator
         {
             // Do nothing
         }
-
-        protected override void OnMessage(int clientId, ISocketMessage message)
+        
+        protected override void OnMessage(ISocketClient client, ISocketMessage message)
         {
-            if (message is AddMessage)
-            {
-                OnAdd(clientId, (AddMessage)message);
-            }
-            else if (message is MultiplyMessage)
-            {
-                OnMultiply(clientId, (MultiplyMessage)message);
-            }
-            else if (message is PingMessage)
-            {
-                // Ignore
-            }
-            else
-            {
-                OnError(clientId, string.Format("[CalculatorServer] Unknown message type: {0}", message.GetType().FullName));
-            }
+          
         }
 
-        private void OnAdd(int clientId, AddMessage addMessage)
+        private void OnAdd(ISocketClient client, AddMessage addMessage)
         {
             Console.WriteLine("[CalculatorServer] OnAdd: {0} + {1}", addMessage.Value1, addMessage.Value2);
 
@@ -49,10 +42,10 @@ namespace Calculator
                 Value = addMessage.Value1 + addMessage.Value2
             };
 
-            SendMessage(clientId, result);
+            SendMessage(client.ConnectionId, result);
         }
 
-        private void OnMultiply(int clientId, MultiplyMessage addMessage)
+        private void OnMultiply(ISocketClient client, MultiplyMessage addMessage)
         {
             Console.WriteLine("[CalculatorServer] OnMultiply: {0} + {1}", addMessage.Value1, addMessage.Value2);
 
@@ -61,10 +54,10 @@ namespace Calculator
                 Value = addMessage.Value1 * addMessage.Value2
             };
 
-            SendMessage(clientId, result);
+            SendMessage(client.ConnectionId, result);
         }
 
-        private void OnError(int clientId, string error)
+        private void OnError(ISocketClient client, string error)
         {
             Console.WriteLine("[CalculatorServer] OnError: {0}", error);
 
@@ -73,7 +66,7 @@ namespace Calculator
                 Message = error
             };
 
-            SendMessage(clientId, result);
+            SendMessage(client.ConnectionId, result);
         }
     }
 }

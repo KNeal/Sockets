@@ -1,13 +1,13 @@
 using System;
 using System.IO;
 
-namespace Sockets
+namespace Sockets.Messages
 {
-    public class PingMessage : SocketMessage
+    public class PingRequestMessage : SocketMessage
     {
         public DateTime SendTimeUtc { get; private set; }
 
-        public PingMessage()
+        public PingRequestMessage()
         {
             SendTimeUtc = DateTime.UtcNow;
         }

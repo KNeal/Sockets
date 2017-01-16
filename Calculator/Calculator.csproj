@@ -39,7 +39,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CalculatorClient.cs" />
-    <Compile Include="CalculatorUtils.cs" />
     <Compile Include="Messages\CalculationErrorMessage.cs" />
     <Compile Include="Messages\CalculationResultMessage.cs" />
     <Compile Include="CalculatorServer.cs" />

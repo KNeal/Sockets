@@ -13,7 +13,7 @@ namespace CalculatorClientApp
         private static void InteractiveClient()
         {
             CalculatorClient client = new CalculatorClient(Dns.GetHostName(), 5000);
-            client.Start();
+            client.Connect("TestUser", "TestPassword");
 
             while (true)
             {
@@ -54,7 +54,7 @@ namespace CalculatorClientApp
             server.Start(5000);
 
             CalculatorClient client = new CalculatorClient(Dns.GetHostName(), 5000);
-            client.Start();
+            client.Connect("TestUser", "TestPassword");
 
             Thread.Sleep(1000);
 

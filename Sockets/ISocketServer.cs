@@ -10,6 +10,6 @@ namespace Sockets
         IList<ISocketClient> ConnectedClients { get; }
         
         void SendMessage(int clientId, ISocketMessage message);
-        void SendMessageToAllClients(ISocketMessage message);
+        void SendMessageToAllClients(ISocketMessage message, int? excludedClientId = null);
     }
 }

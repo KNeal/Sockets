@@ -6,6 +6,18 @@ namespace Sockets
 {
     public static class BinaryUtils
     {
+        public static void WriteBool(Stream stream, bool value)
+        {
+            byte[] b = {value ? (byte) 1 : (byte) 0};
+            stream.Write(b, 0, 1);
+        }
+
+        public static bool ReadBool(Stream stream)
+        {
+            int b = stream.ReadByte();
+            return b > 0;
+        }
+
         public static void WriteInt32(Stream stream, int value)
         {
             byte[] bytes = BitConverter.GetBytes(value);

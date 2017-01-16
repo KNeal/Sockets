@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Sockets;
+using Sockets.Messages;
 
 namespace Calculator
 {

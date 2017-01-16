@@ -1,23 +1,23 @@
 using System;
 using System.IO;
 
-namespace Sockets
+namespace Sockets.Messages
 {
-    public class PongMessage : SocketMessage
+    public class PingResponseMessage : SocketMessage
     {
         public DateTime SendTimeUtc { get; private set; }
         public DateTime RecieveTimeUtc { get; private set; }
 
         public TimeSpan ElapsedTime { get { return RecieveTimeUtc - SendTimeUtc; } }
 
-        public PongMessage()
+        public PingResponseMessage()
         {
 
         }
 
-        public PongMessage(PingMessage ping)
+        public PingResponseMessage(PingRequestMessage pingRequest)
         {
-            SendTimeUtc = ping.SendTimeUtc;
+            SendTimeUtc = pingRequest.SendTimeUtc;
         }
 
         public override void Serialize(Stream stream)

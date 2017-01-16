@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net.Sockets;
-using System.Runtime.InteropServices;
 using System.Threading;
+using Sockets.Messages;
 
 namespace Sockets
 {
@@ -11,7 +11,9 @@ namespace Sockets
         {
             Disconnected,
             Connecting,
-            Connected
+            Authenticating,
+            Connected,
+            Error
         }
 
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
@@ -19,23 +21,37 @@ namespace Sockets
         private readonly int _port;
         private SocketConnection _connection;
         private Timer _updateTimer;
+
+        private string _userName;
+        private string _password;
         
         public State ConnectionState { get; private set; }
+        public string ConnectionError { get; private set; }
 
         protected SocketClient(string host, int port)
         {
             _host = host;
             _port = port;
             ConnectionState = State.Disconnected;
+
+            RegisterMessageType<PingResponseMessage>("PingResponseMessage", OnPingResponse);
         }
-        
-        public void Start()
+
+        private void OnPingResponse(PingResponseMessage message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Connect(string userName, string password)
         {
             ConnectionState = State.Connecting;
+            ConnectionError = null;
+            _userName = userName;
+            _password = password;
             _updateTimer =  new Timer(OnUpdate, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
         }
 
-        public void Stop()
+        public void Disconnect()
         {
             _lock.EnterWriteLock();
             try
@@ -69,11 +85,22 @@ namespace Sockets
         protected abstract void OnMessage(ISocketMessage message);
         
         #region Private Methods
-
+        
+        private void OnUpdate(object state)
+        {
+            if (ConnectionState == State.Connecting)
+            {
+                CreateConnection();
+            }
+            else if (ConnectionState == State.Connected)
+            {
+                WriteMessage(_connection.Socket, new PingRequestMessage());
+            }
+        }
         private void CreateConnection()
         {
             Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            _connection = new SocketConnection(socket);
+            _connection = new SocketConnection(socket, this);
             _connection.Socket.BeginConnect(_host, _port, OnConnect, _connection);
             Console.WriteLine("Connecting to {0}", _connection.Socket.RemoteEndPoint);
         }
@@ -93,7 +120,9 @@ namespace Sockets
                 ConnectionState = State.Connected;
 
                 // Signal that the connection has been made.
-                connection.Socket.BeginReceive(connection.Buffer, 0, connection.Buffer.Length, 0, OnRecieve, connection);
+                connection.ListenForData();
+
+                SendMessage(new AuthRequestMessage() {UserName = _userName, UserToken = _password});
             }
             catch (Exception e)
             {
@@ -101,59 +130,6 @@ namespace Sockets
             }
         }
 
-        public void OnRecieve(IAsyncResult ar)
-        {
-            SocketConnection connection = (SocketConnection)ar.AsyncState;
-            if (connection == null)
-            {
-                return;
-            }
-            
-            // Update the last message time
-            connection.LastMessageTime = DateTime.UtcNow;
-
-            // Read data from the client socket. 
-            int bytesRead = connection.Socket.EndReceive(ar);
-            if (bytesRead > 0)
-            {
-                // There  might be more data, so store the data received so far.
-                connection.MemoryStream.Write(connection.Buffer, 0, bytesRead);
-
-                if (IsEndOfMessage(connection.Buffer, bytesRead))
-                {
-                    ISocketMessage message = ReadMessage(connection.MemoryStream);
-                    if (message != null)
-                    {
-
-                        if (message is PingMessage)
-                        {
-                            WriteMessage(connection.Socket, new PongMessage((PingMessage)message));
-                        }
-
-
-                        connection.MemoryStream.SetLength(0);
-
-                        // Trigger the callback.
-                        OnMessage(message);
-                    }
-                }
-            }
-
-            // Continue Listening
-            connection.Socket.BeginReceive(connection.Buffer, 0, connection.Buffer.Length, 0, OnRecieve, connection);
-        }
-
-        private void OnUpdate(object state)
-        {
-            if (ConnectionState == State.Connecting)
-            {
-                CreateConnection();
-            }
-            else if (ConnectionState == State.Connected)
-            {
-                WriteMessage(_connection.Socket, new PingMessage());
-            }
-        }
 
         #endregion
     }

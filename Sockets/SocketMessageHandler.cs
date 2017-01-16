@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.IO;
 using System.Net.Sockets;
@@ -8,7 +9,7 @@ using System.Security.Cryptography;
 using System.Security.Policy;
 using System.Text;
 using System.Threading;
-using Microsoft.SqlServer.Server;
+using Sockets.Messages;
 
 namespace Sockets
 {
@@ -18,22 +19,26 @@ namespace Sockets
     public abstract class SocketMessageHandler : ISocketMessageHandler
     {
         public static readonly byte[] EndOfMessageBytes = Encoding.ASCII.GetBytes("[EOM]");
-
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
-        private readonly Dictionary<string, Type> _messageTypes = new Dictionary<string, Type>();
-
-        public SocketMessageHandler()
-        {
-            RegisterMessageType<PingMessage>("PingMessage");
-            RegisterMessageType<PongMessage>("PongMessage");
-        }
-
-        public void RegisterMessageType<T>(string messageId)
+        private readonly Dictionary<string, MessageTypeHandler> _messageTypes = new Dictionary<string, MessageTypeHandler>();
+        
+        public void RegisterMessageType<T>(string messageId, Action<ISocketConnection, T> messageHandler) where T : ISocketMessage
         {
             _lock.EnterWriteLock();
             try
             {
-                _messageTypes[messageId] = typeof (T);
+                MessageTypeHandler handler;
+                if (_messageTypes.TryGetValue(messageId, out handler))
+                {
+                    handler = new MessageTypeHandler<T>();
+                    _messageTypes.Add(messageId, handler);
+                }
+
+                MessageTypeHandler<ISocketConnection, T> handlerT = handler as MessageTypeHandler<ISocketConnection, T>;
+                if (handlerT != null)
+                {
+                    handlerT.RegisterHandler(messageHandler);
+                }
             }
             finally
             {
@@ -41,7 +46,7 @@ namespace Sockets
             }    
         }
 
-        protected void WriteMessage(Socket socket, ISocketMessage message)
+        public void WriteMessage(Socket socket, ISocketMessage message)
         {
             if (socket != null)
             {
@@ -60,8 +65,9 @@ namespace Sockets
             }
         }
 
-        protected ISocketMessage ReadMessage(MemoryStream stream)
+        public ISocketMessage ReadMessage(MemoryStream stream)
         {
+            ISocketMessage message = null;
             try
             {
                 // Verify the stream has the EOM bytes
@@ -80,48 +86,23 @@ namespace Sockets
                 // Read the Header
                 stream.Seek(0, 0);
                 string messageTypeName = BinaryUtils.ReadString(stream);
-                Type messageType;
-                if (!_messageTypes.TryGetValue(messageTypeName, out messageType))
+                MessageTypeHandler messageTypeHandler;
+                if (_messageTypes.TryGetValue(messageTypeName, out messageTypeHandler))
+                {
+                    message = messageTypeHandler.ReadMessage(stream);
+                }
+                else
                 {
                     Console.WriteLine("[MessageSocketBase] Failed to find message type: {0}", messageTypeName);
-                    return null;
                 }
-                
-                // Read the data
-                ISocketMessage message = Activator.CreateInstance(messageType) as ISocketMessage;
-                if (message == null)
-                {
-                    Console.WriteLine("[MessageSocketBase] Failed to create message type: {0}", messageTypeName);
-                    return null;
-                }
-                
-                message.Deserialize(stream);
-                return message;
+
             }
             catch (Exception e)
             {
                 Console.WriteLine("[MessageSocketBase] Failed to deserialize message: {0}", e.Message);
-                return null;
-            }
-        }
-
-        protected bool IsEndOfMessage(byte[] bytes, int len)
-        {
-            if (len < EndOfMessageBytes.Length)
-            {
-                return false;
             }
 
-            // Compare the last bytes in the data array to the expected end of array.
-            for (int i = 0; i < EndOfMessageBytes.Length; ++i)
-            {
-                if (bytes[len - 1 - i] != EndOfMessageBytes[EndOfMessageBytes.Length - 1 - i])
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return message;
         }
 
         private byte[] ReadBytes(Stream stream, int count)
@@ -134,6 +115,51 @@ namespace Sockets
 
             return bytes;
         }
+
+        #region Private Classes
+
+
+        private abstract class MessageTypeHandler
+        {
+            public abstract ISocketMessage ReadMessage(ISocketConnection connection, MemoryStream stream);
+        }
+
+        private class MessageTypeHandler<ISocketConnection,T> : MessageTypeHandler where T : ISocketMessage
+        {
+            private readonly Type _type = typeof(T);
+            private readonly List<Action<ISocketConnection, T>> _messageHandlers = new List<Action<ISocketConnection,T>>();
+
+            public void RegisterHandler(Action<ISocketConnection,T> messageHander)
+            {
+                if (messageHander != null)
+                {
+                    // TODO... handle locks?
+                    _messageHandlers.Add(messageHander);
+                }
+            }
+
+            public override ISocketMessage ReadMessage(ISocketConnection connection, MemoryStream stream)
+            {
+                ISocketMessage message = Activator.CreateInstance(_type) as ISocketMessage;
+                message.Deserialize(stream);
+
+                foreach (Action<ISocketConnection,T> messageHandler in _messageHandlers)
+                {
+                    try
+                    {
+                        messageHandler(connection, (T)message);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine("[SocketMessageHandler] Process failure: {0}", e);
+                    }
+                }
+
+                return message;
+            }
+
+        }
+        #endregion
 
     }
 }

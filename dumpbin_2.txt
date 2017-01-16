@@ -1,0 +1,136 @@
+Microsoft (R) COFF/PE Dumper Version 14.00.23026.0
+Copyright (C) Microsoft Corporation.  All rights reserved.
+
+
+Dump of file C:\Kristen\Dev\GitHub\SocketTestApp\ext\aws\GameLiftServerSDK_3_1_1\build\bin\aws-cpp-sdk-gamelift-server.dll
+
+File Type: DLL
+
+  Section contains the following exports for aws-cpp-sdk-gamelift-server.dll
+
+    00000000 characteristics
+    587A55B7 time date stamp Sat Jan 14 08:45:43 2017
+        0.00 version
+           1 ordinal base
+         107 number of functions
+         107 number of names
+
+    ordinal hint RVA      name
+
+          1    0 000060E0 ??0GameLiftError@GameLift@Aws@@QEAA@AEBV012@@Z
+          2    1 00006160 ??0GameLiftError@GameLift@Aws@@QEAA@W4GAMELIFT_ERROR_TYPE@12@@Z
+          3    2 000061D0 ??0GameLiftError@GameLift@Aws@@QEAA@W4GAMELIFT_ERROR_TYPE@12@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@1@Z
+          4    3 00006260 ??0GameLiftError@GameLift@Aws@@QEAA@XZ
+          5    4 000062C0 ??0GameProperty@Model@Server@GameLift@Aws@@QEAA@AEBV01234@@Z
+          6    5 00006330 ??0GameProperty@Model@Server@GameLift@Aws@@QEAA@XZ
+          7    6 00006390 ??0GameSession@Model@Server@GameLift@Aws@@QEAA@AEBV01234@@Z
+          8    7 00006490 ??0GameSession@Model@Server@GameLift@Aws@@QEAA@XZ
+          9    8 00006580 ??0LogParameters@Server@GameLift@Aws@@QEAA@AEBV?$vector@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V?$allocator@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@@std@@@Z
+         10    9 000065C0 ??0LogParameters@Server@GameLift@Aws@@QEAA@XZ
+         11    A 00007060 ??1GameLiftError@GameLift@Aws@@QEAA@XZ
+         12    B 000070B0 ??1GameProperty@Model@Server@GameLift@Aws@@QEAA@XZ
+         13    C 00007100 ??1GameSession@Model@Server@GameLift@Aws@@QEAA@XZ
+         14    D 00007820 ??4GameLiftError@GameLift@Aws@@QEAAAEAV012@AEBV012@@Z
+         15    E 00007890 ??4GameProperty@Model@Server@GameLift@Aws@@QEAAAEAV01234@AEBV01234@@Z
+         16    F 000078F0 ??4GameSession@Model@Server@GameLift@Aws@@QEAAAEAV01234@AEBV01234@@Z
+         17   10 00018390 ?AcceptPlayerSession@Server@GameLift@Aws@@YA?AV?$Outcome@PEAXVGameLiftError@GameLift@Aws@@@23@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         18   11 00017DF0 ?ActivateGameSession@Server@GameLift@Aws@@YA?AV?$Outcome@PEAXVGameLiftError@GameLift@Aws@@@23@XZ
+         19   12 00007F40 ?AddGameProperties@GameSession@Model@Server@GameLift@Aws@@QEAAAEAV12345@$$QEAVGameProperty@2345@@Z
+         20   13 00007F40 ?AddGameProperties@GameSession@Model@Server@GameLift@Aws@@QEAAAEAV12345@AEBVGameProperty@2345@@Z
+         21   14 00018730 ?Destroy@Server@GameLift@Aws@@YA?AV?$Outcome@PEAXVGameLiftError@GameLift@Aws@@@23@XZ
+         22   15 00007F90 ?GetDefaultMessageForErrorType@GameLiftError@GameLift@Aws@@SA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@W4GAMELIFT_ERROR_TYPE@23@@Z
+         23   16 00008350 ?GetDefaultNameForErrorType@GameLiftError@GameLift@Aws@@SA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@W4GAMELIFT_ERROR_TYPE@23@@Z
+         24   17 00008710 ?GetErrorMessage@GameLiftError@GameLift@Aws@@QEBAAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ
+         25   18 00136DC0 ?GetErrorName@GameLiftError@GameLift@Aws@@QEBAAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ
+         26   19 001460B0 ?GetErrorType@GameLiftError@GameLift@Aws@@QEBA?BW4GAMELIFT_ERROR_TYPE@23@XZ
+         27   1A 001DC0F0 ?GetFleetId@GameSession@Model@Server@GameLift@Aws@@QEBAAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ
+         28   1B 00008730 ?GetGameProperties@GameSession@Model@Server@GameLift@Aws@@QEBAAEBV?$vector@VGameProperty@Model@Server@GameLift@Aws@@V?$allocator@VGameProperty@Model@Server@GameLift@Aws@@@std@@@std@@XZ
+         29   1C 0003BCA0 ?GetGameSessionId@GameSession@Model@Server@GameLift@Aws@@QEBAAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ
+         30   1D 00018190 ?GetGameSessionId@Server@GameLift@Aws@@YA?AV?$Outcome@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VGameLiftError@GameLift@Aws@@@23@XZ
+         31   1E 00008750 ?GetIpAddress@GameSession@Model@Server@GameLift@Aws@@QEBAAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ
+         32   1F 0003BCA0 ?GetKey@GameProperty@Model@Server@GameLift@Aws@@QEBAAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ
+         33   20 00008770 ?GetMaximumPlayerSessionCount@GameSession@Model@Server@GameLift@Aws@@QEBAHXZ
+         34   21 001DA910 ?GetName@GameSession@Model@Server@GameLift@Aws@@QEBAAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ
+         35   22 00008780 ?GetNameForPlayerSessionCreationPolicy@PlayerSessionCreationPolicyMapper@Model@Server@GameLift@Aws@@YA?AV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@W4PlayerSessionCreationPolicy@2345@@Z
+         36   23 00008830 ?GetPlayerSessionCreationPolicyForName@PlayerSessionCreationPolicyMapper@Model@Server@GameLift@Aws@@YA?AW4PlayerSessionCreationPolicy@2345@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         37   24 001DC410 ?GetPort@GameSession@Model@Server@GameLift@Aws@@QEBAHXZ
+         38   25 000177B0 ?GetSdkVersion@Server@GameLift@Aws@@YA?AV?$Outcome@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@VGameLiftError@GameLift@Aws@@@23@XZ
+         39   26 000088A0 ?GetStatus@GameSession@Model@Server@GameLift@Aws@@QEBAAEBW4GameSessionStatus@2345@XZ
+         40   27 001DA910 ?GetValue@GameProperty@Model@Server@GameLift@Aws@@QEBAAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@XZ
+         41   28 00017810 ?InitSDK@Server@GameLift@Aws@@YA?AV?$Outcome@PEAVGameLiftServerState@Internal@GameLift@Aws@@VGameLiftError@34@@23@XZ
+         42   29 000179B0 ?InitSDKWithExisting@Server@GameLift@Aws@@YA?AV?$Outcome@PEAVGameLiftServerState@Internal@GameLift@Aws@@VGameLiftError@34@@23@PEAVGameLiftServerState@Internal@23@@Z
+         43   2A 00017CC0 ?ProcessEnding@Server@GameLift@Aws@@YA?AV?$Outcome@PEAXVGameLiftError@GameLift@Aws@@@23@XZ
+         44   2B 00017AF0 ?ProcessReady@Server@GameLift@Aws@@YA?AV?$Outcome@PEAXVGameLiftError@GameLift@Aws@@@23@AEBVProcessParameters@123@@Z
+         45   2C 00017C30 ?ProcessReadyAsync@Server@GameLift@Aws@@YA?AV?$future@V?$Outcome@PEAXVGameLiftError@GameLift@Aws@@@GameLift@Aws@@@std@@AEBVProcessParameters@123@@Z
+         46   2D 00018560 ?RemovePlayerSession@Server@GameLift@Aws@@YA?AV?$Outcome@PEAXVGameLiftError@GameLift@Aws@@@23@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         47   2E 000088E0 ?SetErrorMessage@GameLiftError@GameLift@Aws@@QEAAXAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         48   2F 00008920 ?SetErrorName@GameLiftError@GameLift@Aws@@QEAAXAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         49   30 00008960 ?SetFleetId@GameSession@Model@Server@GameLift@Aws@@QEAAX$$QEAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         50   31 00008960 ?SetFleetId@GameSession@Model@Server@GameLift@Aws@@QEAAXAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         51   32 000089A0 ?SetFleetId@GameSession@Model@Server@GameLift@Aws@@QEAAXPEBD@Z
+         52   33 000089E0 ?SetGameProperties@GameSession@Model@Server@GameLift@Aws@@QEAAX$$QEAV?$vector@VGameProperty@Model@Server@GameLift@Aws@@V?$allocator@VGameProperty@Model@Server@GameLift@Aws@@@std@@@std@@@Z
+         53   34 000089E0 ?SetGameProperties@GameSession@Model@Server@GameLift@Aws@@QEAAXAEBV?$vector@VGameProperty@Model@Server@GameLift@Aws@@V?$allocator@VGameProperty@Model@Server@GameLift@Aws@@@std@@@std@@@Z
+         54   35 00008A30 ?SetGameSessionId@GameSession@Model@Server@GameLift@Aws@@QEAAX$$QEAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         55   36 00008A30 ?SetGameSessionId@GameSession@Model@Server@GameLift@Aws@@QEAAXAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         56   37 00008A70 ?SetGameSessionId@GameSession@Model@Server@GameLift@Aws@@QEAAXPEBD@Z
+         57   38 00008AB0 ?SetIpAddress@GameSession@Model@Server@GameLift@Aws@@QEAAX$$QEAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         58   39 00008AB0 ?SetIpAddress@GameSession@Model@Server@GameLift@Aws@@QEAAXAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         59   3A 00008B00 ?SetIpAddress@GameSession@Model@Server@GameLift@Aws@@QEAAXPEBD@Z
+         60   3B 00008A30 ?SetKey@GameProperty@Model@Server@GameLift@Aws@@QEAAX$$QEAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         61   3C 00008A30 ?SetKey@GameProperty@Model@Server@GameLift@Aws@@QEAAXAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         62   3D 00008A70 ?SetKey@GameProperty@Model@Server@GameLift@Aws@@QEAAXPEBD@Z
+         63   3E 00008B50 ?SetMaximumPlayerSessionCount@GameSession@Model@Server@GameLift@Aws@@QEAAXH@Z
+         64   3F 00008BB0 ?SetName@GameSession@Model@Server@GameLift@Aws@@QEAAX$$QEAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         65   40 00008BB0 ?SetName@GameSession@Model@Server@GameLift@Aws@@QEAAXAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         66   41 00008BF0 ?SetName@GameSession@Model@Server@GameLift@Aws@@QEAAXPEBD@Z
+         67   42 00008B70 ?SetPort@GameSession@Model@Server@GameLift@Aws@@QEAAXH@Z
+         68   43 00008B90 ?SetStatus@GameSession@Model@Server@GameLift@Aws@@QEAAX$$QEAW4GameSessionStatus@2345@@Z
+         69   44 00008B90 ?SetStatus@GameSession@Model@Server@GameLift@Aws@@QEAAXAEBW4GameSessionStatus@2345@@Z
+         70   45 00008BB0 ?SetValue@GameProperty@Model@Server@GameLift@Aws@@QEAAX$$QEAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         71   46 00008BB0 ?SetValue@GameProperty@Model@Server@GameLift@Aws@@QEAAXAEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         72   47 00008BF0 ?SetValue@GameProperty@Model@Server@GameLift@Aws@@QEAAXPEBD@Z
+         73   48 00017F20 ?TerminateGameSession@Server@GameLift@Aws@@YA?AV?$Outcome@PEAXVGameLiftError@GameLift@Aws@@@23@XZ
+         74   49 00018050 ?UpdatePlayerSessionCreationPolicy@Server@GameLift@Aws@@YA?AV?$Outcome@PEAXVGameLiftError@GameLift@Aws@@@23@W4PlayerSessionCreationPolicy@Model@123@@Z
+         75   4A 00008C30 ?WithFleetId@GameSession@Model@Server@GameLift@Aws@@QEAAAEAV12345@$$QEAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         76   4B 00008C30 ?WithFleetId@GameSession@Model@Server@GameLift@Aws@@QEAAAEAV12345@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         77   4C 00008C70 ?WithFleetId@GameSession@Model@Server@GameLift@Aws@@QEAAAEAV12345@PEBD@Z
+         78   4D 00008CB0 ?WithGameProperties@GameSession@Model@Server@GameLift@Aws@@QEAAAEAV12345@$$QEAV?$vector@VGameProperty@Model@Server@GameLift@Aws@@V?$allocator@VGameProperty@Model@Server@GameLift@Aws@@@std@@@std@@@Z
+         79   4E 00008CB0 ?WithGameProperties@GameSession@Model@Server@GameLift@Aws@@QEAAAEAV12345@AEBV?$vector@VGameProperty@Model@Server@GameLift@Aws@@V?$allocator@VGameProperty@Model@Server@GameLift@Aws@@@std@@@std@@@Z
+         80   4F 00008D70 ?WithGameSessionId@GameSession@Model@Server@GameLift@Aws@@QEAAAEAV12345@$$QEAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         81   50 00008D70 ?WithGameSessionId@GameSession@Model@Server@GameLift@Aws@@QEAAAEAV12345@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         82   51 00008DB0 ?WithGameSessionId@GameSession@Model@Server@GameLift@Aws@@QEAAAEAV12345@PEBD@Z
+         83   52 00008CF0 ?WithIpAddress@GameSession@Model@Server@GameLift@Aws@@QEAAAEAV12345@$$QEAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         84   53 00008CF0 ?WithIpAddress@GameSession@Model@Server@GameLift@Aws@@QEAAAEAV12345@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         85   54 00008D30 ?WithIpAddress@GameSession@Model@Server@GameLift@Aws@@QEAAAEAV12345@PEBD@Z
+         86   55 00008D70 ?WithKey@GameProperty@Model@Server@GameLift@Aws@@QEAAAEAV12345@$$QEAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         87   56 00008D70 ?WithKey@GameProperty@Model@Server@GameLift@Aws@@QEAAAEAV12345@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         88   57 00008DB0 ?WithKey@GameProperty@Model@Server@GameLift@Aws@@QEAAAEAV12345@PEBD@Z
+         89   58 00008DF0 ?WithMaximumPlayerSessionCount@GameSession@Model@Server@GameLift@Aws@@QEAAAEAV12345@H@Z
+         90   59 00008EB0 ?WithName@GameSession@Model@Server@GameLift@Aws@@QEAAAEAV12345@$$QEAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         91   5A 00008EB0 ?WithName@GameSession@Model@Server@GameLift@Aws@@QEAAAEAV12345@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         92   5B 00008EF0 ?WithName@GameSession@Model@Server@GameLift@Aws@@QEAAAEAV12345@PEBD@Z
+         93   5C 00008E30 ?WithPort@GameSession@Model@Server@GameLift@Aws@@QEAAAEAV12345@H@Z
+         94   5D 00008E70 ?WithStatus@GameSession@Model@Server@GameLift@Aws@@QEAAAEAV12345@$$QEAW4GameSessionStatus@2345@@Z
+         95   5E 00008E70 ?WithStatus@GameSession@Model@Server@GameLift@Aws@@QEAAAEAV12345@AEBW4GameSessionStatus@2345@@Z
+         96   5F 00008EB0 ?WithValue@GameProperty@Model@Server@GameLift@Aws@@QEAAAEAV12345@$$QEAV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         97   60 00008EB0 ?WithValue@GameProperty@Model@Server@GameLift@Aws@@QEAAAEAV12345@AEBV?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@Z
+         98   61 00008EF0 ?WithValue@GameProperty@Model@Server@GameLift@Aws@@QEAAAEAV12345@PEBD@Z
+         99   62 0000C070 ?getLogParameters@ProcessParameters@Server@GameLift@Aws@@QEBA?AVLogParameters@234@XZ
+        100   63 0000C0D0 ?getLogPaths@LogParameters@Server@GameLift@Aws@@QEBA?AV?$vector@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@V?$allocator@V?$basic_string@DU?$char_traits@D@std@@V?$allocator@D@2@@std@@@2@@std@@XZ
+        101   64 0000C130 ?getOnHealthCheck@ProcessParameters@Server@GameLift@Aws@@QEBA?AV?$function@$$A6A_NXZ@std@@XZ
+        102   65 0000C190 ?getOnProcessTerminate@ProcessParameters@Server@GameLift@Aws@@QEBA?AV?$function@$$A6AXXZ@std@@XZ
+        103   66 0000C1F0 ?getOnStartGameSession@ProcessParameters@Server@GameLift@Aws@@QEBA?AV?$function@$$A6AXVGameSession@Model@Server@GameLift@Aws@@@Z@std@@XZ
+        104   67 0000C250 ?getPort@ProcessParameters@Server@GameLift@Aws@@QEBAHXZ
+        105   68 00002FD0 aws_gamelift_outcome_GetResult_string
+        106   69 00002F30 aws_gamelift_outcome_IsSuccess
+        107   6A 00003060 aws_gamelift_server_GetSdkVersion
+
+  Summary
+
+        D000 .data
+       28000 .pdata
+       B6000 .rdata
+        3000 .reloc
+        1000 .rsrc
+      229000 .text
+        1000 .tls

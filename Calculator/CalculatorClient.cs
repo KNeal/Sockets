@@ -1,30 +1,17 @@
 using System;
 using Sockets;
+using Sockets.Messages;
 
 namespace Calculator
 {
     public class CalculatorClient : SocketClient
     {
         public CalculatorClient(string host, int port)
-            :base(host, port)
+            : base(host, port)
         {
-            CalculatorUtils.RegisterMessages(this);
-        }
-
-        protected override void OnMessage(ISocketMessage message)
-        {
-            if (message is CalculationResultMessage)
-            {
-                OnCalculationResultMessage((CalculationResultMessage)message);
-            }
-            else if (message is CalculationErrorMessage)
-            {
-                OnCalculationErrorMessage((CalculationErrorMessage)message);
-            }
-            else if (message is PongMessage)
-            {
-                OnPongMessage((PongMessage)message);
-            }
+            RegisterMessageType<CalculationResultMessage>("CalculationResultMessage", OnCalculationResultMessage);
+            RegisterMessageType<CalculationErrorMessage>("CalculationErrorMessage", OnCalculationErrorMessage);
+            RegisterMessageType<PingResponseMessage>("PingResponseMessage", OnPingResponseMessage);
         }
 
         private void OnCalculationResultMessage(CalculationResultMessage message)
@@ -37,8 +24,7 @@ namespace Calculator
             Console.WriteLine("[CalculatorClient] Error: {0}", message.Message);
         }
 
-
-        private void OnPongMessage(PongMessage message)
+        private void OnPingResponseMessage(PingResponseMessage message)
         {
             Console.WriteLine("[CalculatorClient] Ping Time: {0}ms", message.ElapsedTime.TotalMilliseconds);
         }
@@ -63,6 +49,11 @@ namespace Calculator
             };
 
             SendMessage(message);
+        }
+
+        protected override void OnMessage(ISocketMessage message)
+        {
+            throw new NotImplementedException();
         }
     }
 }

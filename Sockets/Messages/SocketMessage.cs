@@ -1,6 +1,6 @@
 using System.IO;
 
-namespace Sockets
+namespace Sockets.Messages
 {
     public abstract class SocketMessage : ISocketMessage
     {
