@@ -12,8 +12,13 @@ namespace Sockets
     {
         private ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         private Socket _socket;
-        private readonly Dictionary<int, ClientConnection> _connections = new Dictionary<int, ClientConnection>(); 
-        
+        private readonly Dictionary<int, ClientSocketConnection> _connections = new Dictionary<int, ClientSocketConnection>();
+
+        protected SocketServer()
+        {
+            RegisterMessageType<PingRequestMessage>("PingRequestMessage", OnPingRequestMessage);
+            RegisterMessageType<AuthRequestMessage>("AuthRequestMessage", OnAuthRequestMessage);
+        }
         public void Start(int port)
         {
             _lock.EnterWriteLock();
@@ -49,58 +54,79 @@ namespace Sockets
             }    
         }
 
-        public IList<ISocketClient> ConnectedClients
+        public IList<ISocketConnection> ConnectedClients
         {
-            get { return _connections.Values.Select(x => (ISocketClient)x).ToList(); }
+            get { return _connections.Values.Select(x => (ISocketConnection)x).ToList(); }
         }
 
         public void SendMessage(int connectionId, ISocketMessage message)
         {
-            ClientConnection clientConnection;
+            ClientSocketConnection clientConnection;
             if (_connections.TryGetValue(connectionId, out clientConnection))
             {
                 if (clientConnection.IsAuthenticated)
                 {
-                    WriteMessage(clientConnection.Socket, message);   
+                    clientConnection.WriteMessage(message);   
                 }
             }
         }
 
         public void SendMessageToAllClients(ISocketMessage message, int? excludedConnectionId = null)
         {
-            foreach (ClientConnection client in _connections.Values)
+            foreach (ClientSocketConnection client in _connections.Values)
             {
                 if (client.IsAuthenticated 
                     && (!excludedConnectionId.HasValue || excludedConnectionId.Value != client.ConnectionId))
                 {
-                    WriteMessage(client.Socket, message);
+                    client.WriteMessage(message);            
                 }
             }
         }
 
         protected abstract AuthResult AuthenticateClient(string userName, string userToken);
-        protected abstract void OnClientConnected(ISocketClient client);
-        protected abstract void OnClientDisconnected(ISocketClient client);
-        protected abstract void OnMessage(ISocketClient client, ISocketMessage message);
-
-        #region Private Classes
-
-        private class ClientConnection : SocketConnection, ISocketClient
+        protected abstract void OnClientConnected(ISocketConnection client);
+        protected abstract void OnClientDisconnected(ISocketConnection client);
+        protected abstract void OnMessage(ISocketConnection client, ISocketMessage message);
+        
+        private void OnAuthRequestMessage(ISocketConnection clientConnection, AuthRequestMessage message)
         {
-            public int ConnectionId { get; set; }
-            public bool IsAuthenticated { get; set; }
-            public string UserName { get; set; }
-
-            public ClientConnection(Socket socket, ISocketMessageHandler messageHandler, int bufferLen = DefaultBufferLen)
-                : base(socket, messageHandler, bufferLen)
+            AuthResult result = AuthenticateClient(message.UserName, message.UserToken);
+            if (result.Success)
             {
-             
+                clientConnection.ConnectionName = message.UserName;
+                OnClientConnected(clientConnection);
             }
+            else
+            {
+                // Kill the connection
+                clientConnection.Disconnect();
+                RemoveConnection(clientConnection.ConnectionId);
+            }
+
+            AuthResponseMessage responseMessage = new AuthResponseMessage
+            {
+                Success = result.Success,
+                ErrorMessage = result.Error
+            };
+            SendMessage(clientConnection.ConnectionId, responseMessage);
         }
 
-        #endregion
+        private void OnPingRequestMessage(ISocketConnection arg1, PingRequestMessage arg2)
+        {
+            throw new NotImplementedException();
+        }
 
         #region Private Methods
+
+        private class ClientSocketConnection : SocketConnection
+        {
+            public bool IsAuthenticated { get; set; }
+
+            public ClientSocketConnection(Socket socket, ISocketMessageHandler messageHandler, int bufferLen = DefaultBufferLen) 
+                : base(socket, messageHandler, bufferLen)
+            {
+            }
+        }
 
         private Socket OpenSocket(int port)
         {
@@ -132,7 +158,7 @@ namespace Sockets
             Console.WriteLine("Client connected from at {0}", clientSocket.RemoteEndPoint);
             
             // Create the new client
-            ClientConnection clientConnection = new ClientConnection(clientSocket, this)
+            ClientSocketConnection clientConnection = new ClientSocketConnection(clientSocket, this)
             {
                 ConnectionId = clientId++
             };
@@ -141,7 +167,7 @@ namespace Sockets
             AddConnection(clientConnection);
         }
 
-        private void AddConnection(ClientConnection clientConnection)
+        private void AddConnection(ClientSocketConnection clientConnection)
         {
             _lock.EnterWriteLock();
             try
@@ -154,15 +180,16 @@ namespace Sockets
             }    
         }
 
-        private void RemoveConnection(ClientConnection clientConnection)
+        private void RemoveConnection(int connectionId)
         {
+            ClientSocketConnection connection = null;
 
             _lock.EnterWriteLock();
             try
             {
-                if (_connections.ContainsKey(clientConnection.ConnectionId))
+                if (_connections.TryGetValue(connectionId, out connection))
                 {
-                    _connections.Remove(clientConnection.ConnectionId);
+                    _connections.Remove(connectionId);
                 }
             }
             finally
@@ -171,55 +198,14 @@ namespace Sockets
             }
             
             // Kill the socket and notifiy the subclass.
-            clientConnection.Close();
-            if (clientConnection.IsAuthenticated)
+            if (connection != null)
             {
-                OnClientDisconnected(clientConnection);
+                connection.Disconnect();
+                if (connection.IsAuthenticated)
+                {
+                    OnClientDisconnected(connection);
+                }
             }
-        }
-
-        private bool HandleMessage(ClientConnection clientConnection, ISocketMessage message)
-        {
-            if (message is AuthRequestMessage)
-            {
-                return OnAuthenticateRequestMessage(clientConnection, (message as AuthRequestMessage));
-            }
-            else if (message is PingRequestMessage)
-            {
-                WriteMessage(clientConnection.Socket, new PingResponseMessage((PingRequestMessage)message));
-            }
-            else if(clientConnection.IsAuthenticated)
-            {
-                // Only forward messages for authenticated clients.
-                OnMessage(clientConnection, message);
-            }
-
-            return true;
-        }
-
-        private bool OnAuthenticateRequestMessage(ClientConnection clientConnection, AuthRequestMessage message)
-        {
-            AuthResult result = AuthenticateClient(message.UserName, message.UserToken);
-            if (result.Success)
-            {
-                clientConnection.UserName = message.UserName;
-                OnClientConnected(clientConnection);
-            }
-            else
-            {
-                // Kill the connection
-                clientConnection.Close();
-                RemoveConnection(clientConnection);
-            }
-
-            AuthResponseMessage responseMessage = new AuthResponseMessage
-            {
-                Success = result.Success,
-                ErrorMessage = result.Error
-            };
-            WriteMessage(clientConnection.Socket, responseMessage);
-
-            return result.Success;
         }
 
         #endregion

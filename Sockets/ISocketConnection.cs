@@ -4,8 +4,10 @@ namespace Sockets
 {
     public interface ISocketConnection
     {
-        int ClientId { get; }
-        string ClientName { get; }
-        DateTime LastActiveTime { get; }
+        int ConnectionId { get; }
+        string ConnectionName { get; set; }
+        DateTime LastMessageTime { get; }
+
+        void Disconnect();
     }
 }

@@ -28,13 +28,13 @@ namespace Sockets
             try
             {
                 MessageTypeHandler handler;
-                if (_messageTypes.TryGetValue(messageId, out handler))
+                if (!_messageTypes.TryGetValue(messageId, out handler))
                 {
                     handler = new MessageTypeHandler<T>();
                     _messageTypes.Add(messageId, handler);
                 }
 
-                MessageTypeHandler<ISocketConnection, T> handlerT = handler as MessageTypeHandler<ISocketConnection, T>;
+                MessageTypeHandler<T> handlerT = handler as MessageTypeHandler<T>;
                 if (handlerT != null)
                 {
                     handlerT.RegisterHandler(messageHandler);
@@ -65,7 +65,7 @@ namespace Sockets
             }
         }
 
-        public ISocketMessage ReadMessage(MemoryStream stream)
+        public ISocketMessage ReadMessage(ISocketConnection connection, MemoryStream stream)
         {
             ISocketMessage message = null;
             try
@@ -89,7 +89,7 @@ namespace Sockets
                 MessageTypeHandler messageTypeHandler;
                 if (_messageTypes.TryGetValue(messageTypeName, out messageTypeHandler))
                 {
-                    message = messageTypeHandler.ReadMessage(stream);
+                    message = messageTypeHandler.ReadMessage(connection, stream);
                 }
                 else
                 {
@@ -124,7 +124,7 @@ namespace Sockets
             public abstract ISocketMessage ReadMessage(ISocketConnection connection, MemoryStream stream);
         }
 
-        private class MessageTypeHandler<ISocketConnection,T> : MessageTypeHandler where T : ISocketMessage
+        private class MessageTypeHandler<T> : MessageTypeHandler where T : ISocketMessage
         {
             private readonly Type _type = typeof(T);
             private readonly List<Action<ISocketConnection, T>> _messageHandlers = new List<Action<ISocketConnection,T>>();
@@ -157,7 +157,6 @@ namespace Sockets
 
                 return message;
             }
-
         }
         #endregion
 

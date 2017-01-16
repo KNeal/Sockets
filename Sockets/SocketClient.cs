@@ -34,12 +34,12 @@ namespace Sockets
             _port = port;
             ConnectionState = State.Disconnected;
 
-            RegisterMessageType<PingResponseMessage>("PingResponseMessage", OnPingResponse);
+            RegisterMessageType<PingRequestMessage>("PingRequestMessage", OnPingRequestMessage);
         }
 
-        private void OnPingResponse(PingResponseMessage message)
+        private void OnPingRequestMessage(ISocketConnection connect, PingRequestMessage message)
         {
-            throw new NotImplementedException();
+            SendMessage(new PingResponseMessage(message));
         }
 
         public void Connect(string userName, string password)
@@ -58,8 +58,8 @@ namespace Sockets
             {
                 if (_connection != null)
                 {
-                    _connection.Close();
-                    _connection.Close();
+                    _connection.Disconnect();
+                    _connection.Disconnect();
                     _connection = null;
                 }
 
@@ -79,7 +79,7 @@ namespace Sockets
 
         public void SendMessage(ISocketMessage message)
         {
-            WriteMessage(_connection.Socket, message);
+            _connection.WriteMessage(message);
         }
 
         protected abstract void OnMessage(ISocketMessage message);
@@ -94,41 +94,21 @@ namespace Sockets
             }
             else if (ConnectionState == State.Connected)
             {
-                WriteMessage(_connection.Socket, new PingRequestMessage());
+                _connection.WriteMessage(new PingRequestMessage());
             }
         }
+
         private void CreateConnection()
         {
-            Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            _connection = new SocketConnection(socket, this);
-            _connection.Socket.BeginConnect(_host, _port, OnConnect, _connection);
-            Console.WriteLine("Connecting to {0}", _connection.Socket.RemoteEndPoint);
-        }
-
-        private void OnConnect(IAsyncResult ar)
-        {
-            try
+            _connection = new SocketConnection(this);
+            _connection.OnConnected += delegate(SocketConnection connection)
             {
-                // Retrieve the socket from the state object.
-                SocketConnection connection = (SocketConnection)ar.AsyncState;
-
-                // Complete the connection.
-                connection.Socket.EndConnect(ar);
-
-                Console.WriteLine("Socket connected to {0}", connection.Socket.RemoteEndPoint);
-
-                ConnectionState = State.Connected;
-
-                // Signal that the connection has been made.
-                connection.ListenForData();
-
                 SendMessage(new AuthRequestMessage() {UserName = _userName, UserToken = _password});
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
-            }
+            };
+            _connection.Connect(_host, _port);
         }
+
+       
 
 
         #endregion

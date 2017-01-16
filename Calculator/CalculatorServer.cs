@@ -10,7 +10,11 @@ namespace Calculator
         {
             RegisterMessageType<AddMessage>("AddMessage", OnAdd);
             RegisterMessageType<MultiplyMessage>("MultiplyMessage", OnMultiply);
-            RegisterMessageType<PingRequestMessage>("PingRequestMessage", OnPingRequest);
+        }
+
+        private void OnAuthRequestMessage(ISocketConnection arg1, AuthRequestMessage arg2)
+        {
+            throw new NotImplementedException();
         }
 
         protected override AuthResult AuthenticateClient(string userName, string userToken)
@@ -18,22 +22,22 @@ namespace Calculator
             return AuthResult.Pass();
         }
 
-        protected override void OnClientConnected(ISocketClient client)
+        protected override void OnClientConnected(ISocketConnection client)
         {
             // Do nothing
         }
 
-        protected override void OnClientDisconnected(ISocketClient client)
+        protected override void OnClientDisconnected(ISocketConnection client)
         {
             // Do nothing
         }
-        
-        protected override void OnMessage(ISocketClient client, ISocketMessage message)
+
+        protected override void OnMessage(ISocketConnection client, ISocketMessage message)
         {
           
         }
 
-        private void OnAdd(ISocketClient client, AddMessage addMessage)
+        private void OnAdd(ISocketConnection client, AddMessage addMessage)
         {
             Console.WriteLine("[CalculatorServer] OnAdd: {0} + {1}", addMessage.Value1, addMessage.Value2);
 
@@ -45,7 +49,7 @@ namespace Calculator
             SendMessage(client.ConnectionId, result);
         }
 
-        private void OnMultiply(ISocketClient client, MultiplyMessage addMessage)
+        private void OnMultiply(ISocketConnection client, MultiplyMessage addMessage)
         {
             Console.WriteLine("[CalculatorServer] OnMultiply: {0} + {1}", addMessage.Value1, addMessage.Value2);
 
@@ -57,7 +61,7 @@ namespace Calculator
             SendMessage(client.ConnectionId, result);
         }
 
-        private void OnError(ISocketClient client, string error)
+        private void OnError(ISocketConnection client, string error)
         {
             Console.WriteLine("[CalculatorServer] OnError: {0}", error);
 

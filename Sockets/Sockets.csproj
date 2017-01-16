@@ -48,7 +48,6 @@
     <Compile Include="Utils\BinaryUtils.cs" />
     <Compile Include="Messages\AuthRequestMessage.cs" />
     <Compile Include="IClientCredentials.cs" />
-    <Compile Include="ISocketClient.cs" />
     <Compile Include="ISocketConnection.cs" />
     <Compile Include="ISocketMessage.cs" />
     <Compile Include="ISocketMessageHandler.cs" />

@@ -14,17 +14,17 @@ namespace Calculator
             RegisterMessageType<PingResponseMessage>("PingResponseMessage", OnPingResponseMessage);
         }
 
-        private void OnCalculationResultMessage(CalculationResultMessage message)
+        private void OnCalculationResultMessage(ISocketConnection connection, CalculationResultMessage message)
         {
             Console.WriteLine("[CalculatorClient] Result: {0}", message.Value);
         }
 
-        private void OnCalculationErrorMessage(CalculationErrorMessage message)
+        private void OnCalculationErrorMessage(ISocketConnection connection, CalculationErrorMessage message)
         {
             Console.WriteLine("[CalculatorClient] Error: {0}", message.Message);
         }
 
-        private void OnPingResponseMessage(PingResponseMessage message)
+        private void OnPingResponseMessage(ISocketConnection connection, PingResponseMessage message)
         {
             Console.WriteLine("[CalculatorClient] Ping Time: {0}ms", message.ElapsedTime.TotalMilliseconds);
         }
