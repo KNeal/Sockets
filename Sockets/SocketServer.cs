@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -8,9 +9,9 @@ using Sockets.Messages;
 
 namespace Sockets
 {
-    public abstract class SocketServer : SocketMessageHandler, ISocketServer
+    public abstract class SocketServer : SocketMessageSerializer, ISocketServer
     {
-        private ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+        private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         private Socket _socket;
         private readonly Dictionary<int, ClientSocketConnection> _connections = new Dictionary<int, ClientSocketConnection>();
 
@@ -19,6 +20,7 @@ namespace Sockets
             RegisterMessageType<PingRequestMessage>("PingRequestMessage", OnPingRequestMessage);
             RegisterMessageType<AuthRequestMessage>("AuthRequestMessage", OnAuthRequestMessage);
         }
+
         public void Start(int port)
         {
             _lock.EnterWriteLock();
@@ -26,7 +28,7 @@ namespace Sockets
             {
                 _socket = OpenSocket(port);
 
-                Console.WriteLine("Opening socket at {0}", _socket.LocalEndPoint);
+                Console.WriteLine("[SocketServer] Listening at {0}", _socket.LocalEndPoint);
 
                 _socket.BeginAccept(OnSocketAccept, _socket);
             }
@@ -59,14 +61,19 @@ namespace Sockets
             get { return _connections.Values.Select(x => (ISocketConnection)x).ToList(); }
         }
 
+        public void DisconnectClient(int connectionId)
+        {
+            RemoveConnection(connectionId);
+        }
+
         public void SendMessage(int connectionId, ISocketMessage message)
         {
-            ClientSocketConnection clientConnection;
-            if (_connections.TryGetValue(connectionId, out clientConnection))
+            ClientSocketConnection client;
+            if (_connections.TryGetValue(connectionId, out client))
             {
-                if (clientConnection.IsAuthenticated)
+                if (client.IsAuthenticated)
                 {
-                    clientConnection.WriteMessage(message);   
+                    WriteMessage(client, message);  
                 }
             }
         }
@@ -78,7 +85,7 @@ namespace Sockets
                 if (client.IsAuthenticated 
                     && (!excludedConnectionId.HasValue || excludedConnectionId.Value != client.ConnectionId))
                 {
-                    client.WriteMessage(message);            
+                    WriteMessage(client, message);           
                 }
             }
         }
@@ -94,13 +101,11 @@ namespace Sockets
             if (result.Success)
             {
                 clientConnection.ConnectionName = message.UserName;
+
+                // TODO: Clean up the dependency model instead of doing this hacky cast.
+                ((ClientSocketConnection) clientConnection).IsAuthenticated = true;
+
                 OnClientConnected(clientConnection);
-            }
-            else
-            {
-                // Kill the connection
-                clientConnection.Disconnect();
-                RemoveConnection(clientConnection.ConnectionId);
             }
 
             AuthResponseMessage responseMessage = new AuthResponseMessage
@@ -109,11 +114,15 @@ namespace Sockets
                 ErrorMessage = result.Error
             };
             SendMessage(clientConnection.ConnectionId, responseMessage);
-        }
 
-        private void OnPingRequestMessage(ISocketConnection arg1, PingRequestMessage arg2)
+            if (!result.Success)
+            {
+                DisconnectClient(clientConnection.ConnectionId);
+            }
+        }
+        private void OnPingRequestMessage(ISocketConnection client, PingRequestMessage message)
         {
-            throw new NotImplementedException();
+            SendMessage(client.ConnectionId, new PingResponseMessage(message));
         }
 
         #region Private Methods
@@ -122,8 +131,8 @@ namespace Sockets
         {
             public bool IsAuthenticated { get; set; }
 
-            public ClientSocketConnection(Socket socket, ISocketMessageHandler messageHandler, int bufferLen = DefaultBufferLen) 
-                : base(socket, messageHandler, bufferLen)
+            public ClientSocketConnection(Socket socket) 
+                : base(socket)
             {
             }
         }
@@ -131,8 +140,6 @@ namespace Sockets
         private Socket OpenSocket(int port)
         {
             // Establish the local endpoint for the socket.
-            // The DNS name of the computer
-            // running the listener is "host.contoso.com".
             IPHostEntry ipHostInfo = Dns.Resolve(Dns.GetHostName());
             IPAddress ipAddress = ipHostInfo.AddressList[0];
             IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
@@ -147,21 +154,25 @@ namespace Sockets
             return socket;
         }
 
+        // TODO... something more robust
         private int clientId = 0;
 
-        public void OnSocketAccept(IAsyncResult ar)
+        private void OnSocketAccept(IAsyncResult ar)
         {
             // Get the socket that handles the client request.
             Socket listener = (Socket)ar.AsyncState;
             Socket clientSocket = listener.EndAccept(ar);
 
-            Console.WriteLine("Client connected from at {0}", clientSocket.RemoteEndPoint);
+            Console.WriteLine("[SocketServer] Client connected from at '{0}'", clientSocket.RemoteEndPoint);
             
             // Create the new client
-            ClientSocketConnection clientConnection = new ClientSocketConnection(clientSocket, this)
+            ClientSocketConnection clientConnection = new ClientSocketConnection(clientSocket)
             {
-                ConnectionId = clientId++
+                ConnectionId = ++clientId
             };
+            clientConnection.OnDisconnected += HandleClientDisconnected;
+            clientConnection.OnMessage += HandleClientMessage;
+
             clientConnection.ListenForData();
             
             AddConnection(clientConnection);
@@ -205,8 +216,22 @@ namespace Sockets
                 {
                     OnClientDisconnected(connection);
                 }
+
+                connection.OnDisconnected -= HandleClientDisconnected;
+                connection.OnMessage -= HandleClientMessage;
             }
         }
+
+        private void HandleClientDisconnected(SocketConnection connection)
+        {
+            RemoveConnection(connection.ConnectionId);
+        }
+
+        private void HandleClientMessage(SocketConnection connection, MemoryStream stream)
+        {
+            ReadMessage(connection, stream);
+        }
+
 
         #endregion
     }

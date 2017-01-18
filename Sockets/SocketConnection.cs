@@ -1,55 +1,72 @@
 using System;
 using System.IO;
 using System.Net.Sockets;
+using System.Text;
 
 namespace Sockets
 {
     public class SocketConnection : ISocketConnection
     {
+        public static class Defaults
+        {
+            public const int ReadBufferLen = 1024;
+            public static readonly byte[] EndOfMessageBytes = Encoding.ASCII.GetBytes("[EOM]");
+        }
+        
         public enum State
         {
             Disconnected,
             Connecting,
-            Authenticating,
             Connected,
             Error
         }
 
-        public const int DefaultBufferLen = 1024;
-
-        public int ConnectionId { get; set; }
-        public string ConnectionName { get; set; }
-        public State ConnectionState { get; set; }
-        public DateTime LastMessageTime { get; private set; }
-
-        private Socket _socket;
-        private readonly ISocketMessageHandler _messageHandler;
-        private readonly byte[] _buffer;
-        private readonly MemoryStream _memoryStream;
 
         public delegate void ConnectionStateCallback(SocketConnection connection);
+        public delegate void MessageCallback(SocketConnection connection, MemoryStream stream);
+        public delegate void WriteCallback(Stream outputStream);
+        
+        public int ConnectionId { get; set; }
+        public string ConnectionName { get; set; }
+        public State ConnectionState { get; private set; }
+        public DateTime LastMessageTime { get; private set; }
+        
+        private object _lock = new object();
+        private Socket _socket;
+        private readonly byte[] _readBuffer;
+        private readonly MemoryStream _readStream;
+        private readonly byte[] _endOfMessageBytes;
 
         public event ConnectionStateCallback OnConnected;
         public event ConnectionStateCallback OnDisconnected;
+        public event MessageCallback OnMessage;
 
-        public SocketConnection(ISocketMessageHandler messageHandler, int bufferLen = DefaultBufferLen)
-            : this(null, messageHandler, bufferLen)
+        public SocketConnection()
+            : this(null, Defaults.ReadBufferLen, Defaults.EndOfMessageBytes)
         {
         }
 
-        public SocketConnection(Socket socket, ISocketMessageHandler messageHandler, int bufferLen = DefaultBufferLen)
+        public SocketConnection(Socket socket)
+            : this(socket, Defaults.ReadBufferLen, Defaults.EndOfMessageBytes)
+        {
+        }
+
+        public SocketConnection(Socket socket, int bufferLen, byte[] eomBytes)
         {
             _socket = socket;
-            _messageHandler = messageHandler;
-            _buffer = new byte[DefaultBufferLen];
-            _memoryStream = new MemoryStream(DefaultBufferLen);
+            _readBuffer = new byte[bufferLen];
+            _readStream = new MemoryStream(bufferLen);
+            _endOfMessageBytes = eomBytes;
+
+            // TODO: find a more robust way for intializing with and without an open socket.
+            SetConnectionState(_socket != null? State.Connected : State.Disconnected);
         }
 
         public void Connect(string host, int port)
         {
             _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
             _socket.BeginConnect(host, port, OnConnect, this);
-            Console.WriteLine("Connecting to {0}", _socket.RemoteEndPoint);
+            Console.WriteLine("[SocketConnection] Connecting to {0}", _socket.RemoteEndPoint);
         }
 
         public void Disconnect()
@@ -69,8 +86,9 @@ namespace Sockets
                 // Complete the connection.
                 _socket.EndConnect(ar);
                 ListenForData();
+                
+                Console.WriteLine("Socket connected to {0}", _socket.RemoteEndPoint);                
 
-                Console.WriteLine("Socket connected to {0}", _socket.RemoteEndPoint);
                 SetConnectionState(State.Connected);
             }
             catch (Exception e)
@@ -81,12 +99,25 @@ namespace Sockets
 
         public void ListenForData()
         {
-            _socket.BeginReceive(_buffer, 0, _buffer.Length, 0, OnRecieve, this);
+            _socket.BeginReceive(_readBuffer, 0, _readBuffer.Length, 0, OnRecieve, this);
         }
 
-        public void WriteMessage(ISocketMessage message)
+        public void WriteMessage(WriteCallback writeCallback)
         {
-            _messageHandler.WriteMessage(_socket, message);
+            if (ConnectionState != State.Connected)
+            {
+                throw new Exception("Socket is not connected");
+            }
+
+            // TODO: pool use of memory streams.
+            MemoryStream stream = new MemoryStream();
+
+            // Write the data
+            writeCallback(stream);
+
+            // Write the EOM
+            stream.Write(_endOfMessageBytes, 0, _endOfMessageBytes.Length);
+            _socket.Send(stream.ToArray());
         }
 
         private void OnRecieve(IAsyncResult ar)
@@ -98,15 +129,64 @@ namespace Sockets
             int bytesRead = _socket.EndReceive(ar);
             if (bytesRead > 0)
             {
-                // There  might be more data, so store the data received so far.
-                _memoryStream.Write(_buffer, 0, bytesRead);
-
-                _messageHandler.ReadMessage(this, _memoryStream);
+                _readStream.Write(_readBuffer, 0, bytesRead);
             }
 
+            // Handle a completed message
+            if (IsEndOfMessage(_readBuffer, bytesRead))
+            {
+                ReadMessage();
+            }
+            
             // Continue Listening
             ListenForData();
         }
+
+        private bool IsEndOfMessage(byte[] buffer, int len)
+        {
+            if (buffer == null || buffer.Length < _endOfMessageBytes.Length || len < _endOfMessageBytes.Length)
+            {
+                return false;
+            }
+
+            // Compare the last N bytes in the buffe against the EOM values.
+            int startPos = len - _endOfMessageBytes.Length;
+            for (int i = 0; i < _endOfMessageBytes.Length; ++i)
+            {
+                if (buffer[startPos + i] != _endOfMessageBytes[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        private void ReadMessage()
+        {
+            // Strip off the EOM Bytes
+            _readStream.SetLength(_readStream.Length - _endOfMessageBytes.Length);
+
+            // Reset the stream position to the begining.
+            _readStream.Seek(0, 0);
+
+            MessageCallback callback = OnMessage;
+            if (callback != null)
+            {
+                try
+                {
+                    callback(this, _readStream);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("[SocketConnection] OnMessage Handler Error: {0}", e);
+                }
+            }
+
+            // Reset the buffer
+            _readStream.SetLength(0);
+        }
+
 
         private void SetConnectionState(State state)
         {

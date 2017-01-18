@@ -1,28 +1,21 @@
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Common;
 using System.IO;
 using System.Net.Sockets;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Security.Cryptography;
-using System.Security.Policy;
 using System.Text;
 using System.Threading;
-using Sockets.Messages;
 
 namespace Sockets
 {
     /// <summary>
     /// This is a base class for serializing and deserializing socket messages.
     /// </summary>
-    public abstract class SocketMessageHandler : ISocketMessageHandler
+    public abstract class SocketMessageSerializer
     {
-        public static readonly byte[] EndOfMessageBytes = Encoding.ASCII.GetBytes("[EOM]");
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         private readonly Dictionary<string, MessageTypeHandler> _messageTypes = new Dictionary<string, MessageTypeHandler>();
-        
-        public void RegisterMessageType<T>(string messageId, Action<ISocketConnection, T> messageHandler) where T : ISocketMessage
+
+        protected void RegisterMessageType<T>(string messageId, Action<ISocketConnection, T> messageHandler) where T : ISocketMessage
         {
             _lock.EnterWriteLock();
             try
@@ -43,53 +36,22 @@ namespace Sockets
             finally
             {
                 _lock.ExitWriteLock();
-            }    
-        }
-
-        public void WriteMessage(Socket socket, ISocketMessage message)
-        {
-            if (socket != null)
-            {
-                // TODO: pool use of memory streams.
-                MemoryStream stream = new MemoryStream();
-
-                // Write the Header
-                BinaryUtils.WriteString(stream, message.MessageType);
-
-                // Write the Data
-                message.Serialize(stream);
-
-                // Write the Footer
-                stream.Write(EndOfMessageBytes, 0, EndOfMessageBytes.Length);
-                socket.Send(stream.ToArray());
             }
         }
 
-        public ISocketMessage ReadMessage(ISocketConnection connection, MemoryStream stream)
+        protected void ReadMessage(SocketConnection connection, Stream stream)
         {
-            ISocketMessage message = null;
+            _lock.EnterReadLock();
             try
             {
-                // Verify the stream has the EOM bytes
-                stream.Seek(-EndOfMessageBytes.Length, SeekOrigin.End);
-                for (int i = 0; i < EndOfMessageBytes.Length; ++i)
-                {
-                    if (stream.ReadByte() != EndOfMessageBytes[i])
-                    {
-                        return null;
-                    }
-                }
-
-                // Strip off the Footer Data
-                stream.SetLength(stream.Length - EndOfMessageBytes.Length);
-                
                 // Read the Header
-                stream.Seek(0, 0);
                 string messageTypeName = BinaryUtils.ReadString(stream);
+
+                // Read the Message
                 MessageTypeHandler messageTypeHandler;
                 if (_messageTypes.TryGetValue(messageTypeName, out messageTypeHandler))
                 {
-                    message = messageTypeHandler.ReadMessage(connection, stream);
+                    messageTypeHandler.ReadMessage(connection, stream);
                 }
                 else
                 {
@@ -101,27 +63,26 @@ namespace Sockets
             {
                 Console.WriteLine("[MessageSocketBase] Failed to deserialize message: {0}", e.Message);
             }
-
-            return message;
+            finally
+            {
+                _lock.ExitReadLock();
+            }
         }
 
-        private byte[] ReadBytes(Stream stream, int count)
+        protected void WriteMessage(SocketConnection connection, ISocketMessage message)
         {
-            byte[] bytes = new byte[count];
-            for (int i = 0; i < bytes.Length; ++i)
+            connection.WriteMessage((stream) =>
             {
-                bytes[i] = (byte)stream.ReadByte();
-            }
-
-            return bytes;
+                BinaryUtils.WriteString(stream, message.MessageType);
+                message.Serialize(stream);
+            });
         }
 
         #region Private Classes
 
-
         private abstract class MessageTypeHandler
         {
-            public abstract ISocketMessage ReadMessage(ISocketConnection connection, MemoryStream stream);
+            public abstract void ReadMessage(ISocketConnection connection, Stream stream);
         }
 
         private class MessageTypeHandler<T> : MessageTypeHandler where T : ISocketMessage
@@ -138,9 +99,15 @@ namespace Sockets
                 }
             }
 
-            public override ISocketMessage ReadMessage(ISocketConnection connection, MemoryStream stream)
+            public override void ReadMessage(ISocketConnection connection, Stream stream)
             {
                 ISocketMessage message = Activator.CreateInstance(_type) as ISocketMessage;
+                if (message == null)
+                {
+                    Console.WriteLine("[SocketMessageHandler] Failed to create message of type={0}", _type);
+                    return;
+                }
+
                 message.Deserialize(stream);
 
                 foreach (Action<ISocketConnection,T> messageHandler in _messageHandlers)
@@ -154,11 +121,8 @@ namespace Sockets
                         Console.WriteLine("[SocketMessageHandler] Process failure: {0}", e);
                     }
                 }
-
-                return message;
             }
         }
         #endregion
-
     }
 }

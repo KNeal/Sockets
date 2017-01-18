@@ -5,6 +5,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 using Calculator;
+using Sockets;
 
 namespace CalculatorClientApp
 {
@@ -55,6 +56,11 @@ namespace CalculatorClientApp
 
             CalculatorClient client = new CalculatorClient(Dns.GetHostName(), 5000);
             client.Connect("TestUser", "TestPassword");
+
+            while (client.ConnectionState != SocketClient.State.Connected)
+            {
+                //Console.WriteLine("Waiting for client connection");
+            }
 
             Thread.Sleep(1000);
 

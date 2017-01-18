@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Sockets
 {
-    public interface ISocketServer:  ISocketMessageHandler
+    public interface ISocketServer
     {
         void Start(int port);
         void Stop();

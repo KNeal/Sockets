@@ -54,23 +54,37 @@ namespace Sockets
 
         public static void WriteString(Stream stream, string value)
         {
-            byte[] data = Encoding.UTF8.GetBytes(value);
+            if (value == null)
+            {
+                WriteInt32(stream, 0);
+            }
+            else
+            {
+                byte[] data = Encoding.UTF8.GetBytes(value);
 
-            WriteInt32(stream, data.Length);
-            stream.Write(data, 0, data.Length);
+                WriteInt32(stream, data.Length);
+                stream.Write(data, 0, data.Length);
+            }
         }
 
         public static string ReadString(Stream stream)
         {
             int len = ReadInt32(stream);
 
-            byte[] dataBytes = new byte[len];
-            for (int i = 0; i < len; ++i)
+            if (len == 0)
             {
-                dataBytes[i] = (byte)stream.ReadByte();
+                return null;
             }
+            else
+            {
+                byte[] dataBytes = new byte[len];
+                for (int i = 0; i < len; ++i)
+                {
+                    dataBytes[i] = (byte)stream.ReadByte();
+                }
 
-            return Encoding.UTF8.GetString(dataBytes);
+                return Encoding.UTF8.GetString(dataBytes);
+            }
         }
     }
 }

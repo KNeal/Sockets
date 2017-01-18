@@ -50,13 +50,12 @@
     <Compile Include="IClientCredentials.cs" />
     <Compile Include="ISocketConnection.cs" />
     <Compile Include="ISocketMessage.cs" />
-    <Compile Include="ISocketMessageHandler.cs" />
     <Compile Include="ISocketServer.cs" />
     <Compile Include="Messages\PingRequestMessage.cs" />
     <Compile Include="Messages\PingResponseMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Messages\SocketMessage.cs" />
-    <Compile Include="SocketMessageHandler.cs" />
+    <Compile Include="SocketMessageSerializer.cs" />
     <Compile Include="SocketClient.cs" />
     <Compile Include="SocketServer.cs" />
     <Compile Include="SocketConnection.cs" />

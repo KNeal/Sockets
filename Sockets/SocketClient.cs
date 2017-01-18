@@ -1,11 +1,12 @@
 ﻿using System;
+using System.IO;
 using System.Net.Sockets;
 using System.Threading;
 using Sockets.Messages;
 
 namespace Sockets
 {
-    public abstract class SocketClient : SocketMessageHandler
+    public abstract class SocketClient : SocketMessageSerializer
     {
         public enum State
         {
@@ -35,11 +36,17 @@ namespace Sockets
             ConnectionState = State.Disconnected;
 
             RegisterMessageType<PingRequestMessage>("PingRequestMessage", OnPingRequestMessage);
+            RegisterMessageType<AuthResponseMessage>("AuthResponseMessage", OnAuthResponseMessage);
         }
 
         private void OnPingRequestMessage(ISocketConnection connect, PingRequestMessage message)
         {
             SendMessage(new PingResponseMessage(message));
+        }
+
+        private void OnAuthResponseMessage(ISocketConnection arg1, AuthResponseMessage arg2)
+        {
+            ConnectionState = State.Connected;
         }
 
         public void Connect(string userName, string password)
@@ -49,6 +56,7 @@ namespace Sockets
             _userName = userName;
             _password = password;
             _updateTimer =  new Timer(OnUpdate, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
+            CreateConnection();
         }
 
         public void Disconnect()
@@ -59,7 +67,9 @@ namespace Sockets
                 if (_connection != null)
                 {
                     _connection.Disconnect();
-                    _connection.Disconnect();
+                    _connection.OnConnected -= HandleConnected;
+                    _connection.OnDisconnected -= HandleDisconnected;
+                    _connection.OnMessage += HandleMessage;
                     _connection = null;
                 }
 
@@ -79,7 +89,10 @@ namespace Sockets
 
         public void SendMessage(ISocketMessage message)
         {
-            _connection.WriteMessage(message);
+            if (_connection != null)
+            {
+                WriteMessage(_connection, message);
+            }
         }
 
         protected abstract void OnMessage(ISocketMessage message);
@@ -88,28 +101,37 @@ namespace Sockets
         
         private void OnUpdate(object state)
         {
-            if (ConnectionState == State.Connecting)
+            if (ConnectionState == State.Connected)
             {
-                CreateConnection();
-            }
-            else if (ConnectionState == State.Connected)
-            {
-                _connection.WriteMessage(new PingRequestMessage());
+                WriteMessage(_connection, new PingRequestMessage());
             }
         }
 
         private void CreateConnection()
         {
-            _connection = new SocketConnection(this);
-            _connection.OnConnected += delegate(SocketConnection connection)
-            {
-                SendMessage(new AuthRequestMessage() {UserName = _userName, UserToken = _password});
-            };
+            _connection = new SocketConnection();
+            _connection.OnConnected += HandleConnected;
+            _connection.OnDisconnected += HandleDisconnected;
+            _connection.OnMessage += HandleMessage;
+
             _connection.Connect(_host, _port);
         }
 
-       
+        private void HandleMessage(SocketConnection connection, MemoryStream stream)
+        {
+            ReadMessage(connection, stream);
+        }
 
+        private void HandleConnected(SocketConnection connection)
+        {
+            ConnectionState = State.Authenticating;
+            SendMessage(new AuthRequestMessage() {UserName = _userName, UserToken = _password});
+        }
+
+        private void HandleDisconnected(SocketConnection connection)
+        {
+            Disconnect();
+        }
 
         #endregion
     }

@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 
 namespace Sockets
 {
@@ -7,7 +8,5 @@ namespace Sockets
         int ConnectionId { get; }
         string ConnectionName { get; set; }
         DateTime LastMessageTime { get; }
-
-        void Disconnect();
     }
 }
