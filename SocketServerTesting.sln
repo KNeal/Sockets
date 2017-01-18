@@ -27,6 +27,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CalculatorTests", "Calculat
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "aws-cpp-sdk-gamelift-server", "ext\aws\GameLiftServerSDK_3_1_1\build\gamelift-server-sdk\aws-cpp-sdk-gamelift-server.vcxproj", "{D885381B-FEB1-33A5-9317-C4C05375F44D}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BouncingBalls", "BouncingBalls", "{DD00028E-C992-4425-8350-2A8DC7322D82}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoApp", "BouncingBalls\DemoApp\DemoApp.csproj", "{DE05E372-CF8D-4390-987C-C7B3AD20DF20}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -291,6 +295,36 @@ Global
 		{D885381B-FEB1-33A5-9317-C4C05375F44D}.RelWithDebInfo|Win32.ActiveCfg = RelWithDebInfo|x64
 		{D885381B-FEB1-33A5-9317-C4C05375F44D}.RelWithDebInfo|x64.ActiveCfg = RelWithDebInfo|x64
 		{D885381B-FEB1-33A5-9317-C4C05375F44D}.RelWithDebInfo|x64.Build.0 = RelWithDebInfo|x64
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.DebugDLL|Any CPU.ActiveCfg = Debug|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.DebugDLL|Any CPU.Build.0 = Debug|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.DebugDLL|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.DebugDLL|Mixed Platforms.Build.0 = Debug|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.DebugDLL|Win32.ActiveCfg = Debug|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.DebugDLL|x64.ActiveCfg = Debug|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.MinSizeRel|Any CPU.ActiveCfg = Release|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.MinSizeRel|Any CPU.Build.0 = Release|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.MinSizeRel|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.MinSizeRel|Mixed Platforms.Build.0 = Release|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.MinSizeRel|Win32.ActiveCfg = Release|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.MinSizeRel|x64.ActiveCfg = Release|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.Release|Win32.ActiveCfg = Release|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.Release|x64.ActiveCfg = Release|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.RelWithDebInfo|Any CPU.ActiveCfg = Release|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.RelWithDebInfo|Any CPU.Build.0 = Release|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.RelWithDebInfo|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.RelWithDebInfo|Mixed Platforms.Build.0 = Release|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.RelWithDebInfo|Win32.ActiveCfg = Release|Any CPU
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20}.RelWithDebInfo|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -303,5 +337,6 @@ Global
 		{14897A23-359F-4709-80AC-E869438710BB} = {C76D1FAE-EB4C-464C-A34A-0A6FD569F012}
 		{80F89500-33E5-4D56-BC22-87D4581D1E33} = {C76D1FAE-EB4C-464C-A34A-0A6FD569F012}
 		{D885381B-FEB1-33A5-9317-C4C05375F44D} = {2807ED1B-3999-419B-AD27-6AE3D653A2D2}
+		{DE05E372-CF8D-4390-987C-C7B3AD20DF20} = {DD00028E-C992-4425-8350-2A8DC7322D82}
 	EndGlobalSection
 EndGlobal
