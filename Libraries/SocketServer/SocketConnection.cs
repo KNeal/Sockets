@@ -21,7 +21,6 @@ namespace SocketServer
             Error
         }
 
-
         public delegate void ConnectionStateCallback(SocketConnection connection);
         public delegate void MessageCallback(SocketConnection connection, MemoryStream stream);
         public delegate void WriteCallback(Stream outputStream);
@@ -120,6 +119,7 @@ namespace SocketServer
             _socket.Send(stream.ToArray());
         }
 
+        #region Private Methods
         private void OnRecieve(IAsyncResult ar)
         {
             // Update the last message time
@@ -209,5 +209,6 @@ namespace SocketServer
                 callback(this);
             }
         }
+        #endregion
     }
 }

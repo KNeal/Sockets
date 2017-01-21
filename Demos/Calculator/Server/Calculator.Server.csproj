@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BF291B40-07C5-4174-AA61-D2E863596340}</ProjectGuid>
+    <ProjectGuid>{30363BC3-57CD-44B5-86C6-99F188B04416}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Test</RootNamespace>
-    <AssemblyName>Test</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <RootNamespace>CalculatorServerApp</RootNamespace>
+    <AssemblyName>CalculatorServerApp</AssemblyName>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -21,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -30,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -40,19 +43,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CalculatorServer.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Libraries\SocketServer.GameLift\SocketServer.Server.GameLift.csproj">
-      <Project>{86A69065-08C2-4566-BC8A-BCBF2E46393F}</Project>
-      <Name>SocketServer.Server.GameLift</Name>
+    <ProjectReference Include="..\..\..\SocketServer.Server\SocketServer.Server.csproj">
+      <Project>{ae9cfe97-4e2c-4026-9933-029ca44ec20c}</Project>
+      <Name>SocketServer.Server</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Libraries\SocketServer\SocketServer.csproj">
+      <Project>{3D4048E9-EC1A-4108-893E-D43B155BACE0}</Project>
+      <Name>SocketServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Messages\Calculator.Messages.csproj">
+      <Project>{47091F6C-B9E4-4FBD-B273-25D86736E8FA}</Project>
+      <Name>Calculator.Messages</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>XCOPY "$(SolutionDir)ext\aws\GameLiftServerSDK_3_1_1\build\bin\aws-cpp-sdk-gamelift-server.dll" "$(TargetDir)" /Y</PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
