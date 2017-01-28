@@ -30,16 +30,18 @@ namespace SocketServer
         public State ConnectionState { get; private set; }
         public DateTime LastMessageTime { get; private set; }
         
-        private object _lock = new object();
+        private readonly object _writeLock = new object();
+        private readonly object _readLock = new object();
         private Socket _socket;
         private readonly byte[] _readBuffer;
         private readonly MemoryStream _readStream;
+        private readonly MemoryStream _writeStream;
         private readonly byte[] _endOfMessageBytes;
 
         public event ConnectionStateCallback OnConnected;
         public event ConnectionStateCallback OnDisconnected;
         public event MessageCallback OnMessage;
-
+        
         public SocketConnection()
             : this(null, Defaults.ReadBufferLen, Defaults.EndOfMessageBytes)
         {
@@ -55,6 +57,7 @@ namespace SocketServer
             _socket = socket;
             _readBuffer = new byte[bufferLen];
             _readStream = new MemoryStream(bufferLen);
+            _writeStream = new MemoryStream(bufferLen);
             _endOfMessageBytes = eomBytes;
 
             // TODO: find a more robust way for intializing with and without an open socket.
@@ -63,83 +66,111 @@ namespace SocketServer
 
         public void Connect(string host, int port)
         {
-            _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            _socket.BeginConnect(host, port, OnConnect, this);
-            Console.WriteLine("[SocketConnection] Connecting to {0}", _socket.RemoteEndPoint);
+            lock (_writeLock)
+            lock (_readLock)
+            {
+                _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                _socket.BeginConnect(host, port, OnConnect, this);
+                Console.WriteLine("[SocketConnection] Attempting to connecting to {0}:{1}", port, host);
+            }
         }
 
         public void Disconnect()
         {
-            if (_socket != null)
+            lock (_writeLock)
+            lock (_readLock)
             {
-                _socket.Shutdown(SocketShutdown.Both);
-                _socket.Close();
-                _socket = null;
+                if (_socket != null)
+                {
+                    _socket.Shutdown(SocketShutdown.Both);
+                    _socket.Close();
+                    _socket = null;
+                }
             }
         }
 
-        private void OnConnect(IAsyncResult ar)
+        public void WriteMessage(WriteCallback writeCallback)
         {
-            try
+            lock (_writeLock)
             {
-                // Complete the connection.
-                _socket.EndConnect(ar);
-                ListenForData();
-                
-                Console.WriteLine("Socket connected to {0}", _socket.RemoteEndPoint);                
+                if (ConnectionState != State.Connected)
+                {
+                    throw new Exception("Socket is not connected");
+                }
 
-                SetConnectionState(State.Connected);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.ToString());
+                // Write the data
+                _writeStream.SetLength(0);
+                writeCallback(_writeStream);
+
+                // Write the EOM
+                _writeStream.Write(_endOfMessageBytes, 0, _endOfMessageBytes.Length);
+                _socket.Send(_writeStream.ToArray());
             }
         }
 
         public void ListenForData()
         {
-            _socket.BeginReceive(_readBuffer, 0, _readBuffer.Length, 0, OnRecieve, this);
-        }
-
-        public void WriteMessage(WriteCallback writeCallback)
-        {
-            if (ConnectionState != State.Connected)
+            lock (_readLock)
             {
-                throw new Exception("Socket is not connected");
+                if (_socket != null)
+                {
+                    _socket.BeginReceive(_readBuffer, 0, _readBuffer.Length, 0, OnRecieve, this);
+                }
             }
-
-            // TODO: pool use of memory streams.
-            MemoryStream stream = new MemoryStream();
-
-            // Write the data
-            writeCallback(stream);
-
-            // Write the EOM
-            stream.Write(_endOfMessageBytes, 0, _endOfMessageBytes.Length);
-            _socket.Send(stream.ToArray());
         }
 
         #region Private Methods
+        private void OnConnect(IAsyncResult ar)
+        {
+            lock (_readLock)
+            {
+                try
+                {
+                    // Complete the connection.
+                    _socket.EndConnect(ar);
+                    ListenForData();
+
+                    Console.WriteLine("[SocketConnection] Successfully connected to {0}", _socket.RemoteEndPoint);
+
+                    SetConnectionState(State.Connected);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("[SocketConnection] OnConnect Failed: {0}", e);
+                }
+            }
+        }
+
         private void OnRecieve(IAsyncResult ar)
         {
-            // Update the last message time
-            LastMessageTime = DateTime.UtcNow;
-
-            // Read data from the client socket. 
-            int bytesRead = _socket.EndReceive(ar);
-            if (bytesRead > 0)
+            lock (_readLock)
             {
-                _readStream.Write(_readBuffer, 0, bytesRead);
+                try
+                {
+                    // Update the last message time
+                    LastMessageTime = DateTime.UtcNow;
+
+                    // Read data from the client socket. 
+                    int bytesRead = _socket.EndReceive(ar);
+                    if (bytesRead > 0)
+                    {
+                        _readStream.Write(_readBuffer, 0, bytesRead);
+                    }
+
+                    // Handle a completed message
+                    if (IsEndOfMessage(_readBuffer, bytesRead))
+                    {
+                        ReadMessage();
+                    }
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("[SocketConnection] OnRecieve Failed: {0}", e);
+                }
+
+                ListenForData();
             }
 
-            // Handle a completed message
-            if (IsEndOfMessage(_readBuffer, bytesRead))
-            {
-                ReadMessage();
-            }
-            
-            // Continue Listening
-            ListenForData();
         }
 
         private bool IsEndOfMessage(byte[] buffer, int len)

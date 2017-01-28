@@ -38,6 +38,8 @@ namespace DemoApp
         public void AddBall(IBall ball)
         {
             _balls[ball.Id] = ball;
+
+            UpdateLabel();
         }
 
         public void RemoveBall(IBall ball)
@@ -46,6 +48,13 @@ namespace DemoApp
             {
                 _balls.Remove(ball.Id);
             }
+
+            UpdateLabel();
+        }
+
+        private void UpdateLabel()
+        {
+            _bottomLabel.Text = _balls.Count.ToString();
         }
 
         private void GraphicsView_Paint(object sender, PaintEventArgs e)

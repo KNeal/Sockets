@@ -123,14 +123,13 @@ namespace SocketServer
 
         }
         
-
         #region Private Methods
         
         private void OnUpdate(object state)
         {
             if (ConnectionState == State.Connected)
             {
-                WriteMessage(_connection, new PingRequestMessage());
+               // WriteMessage(_connection, new PingRequestMessage());
             }
         }
 

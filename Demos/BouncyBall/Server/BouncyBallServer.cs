@@ -1,4 +1,5 @@
-﻿using BouncingBalls.Messages;
+﻿using System;
+using BouncingBalls.Messages;
 using BouncyBall.Server.State;
 using SocketServer;
 
@@ -10,13 +11,15 @@ namespace BouncyBall.Server
 
         public BouncyBallServer()
         {
-            RegisterMessageType<CreateBallMessage>("CreateBallMessage", OnSpawnBallMessage);
+            RegisterMessageType<CreateBallMessage>("CreateBallMessage", OnCreateBallMessage);
             RegisterMessageType<UpdateBallMessage>("UpdateBallMessage", OnUpdateBallPositionMessage);
         }
 
         #region Connection Management
-        protected override AuthResult AuthenticateClient(string userName, string userToken)
+        protected override AuthResult AuthenticateClient(string userName, string password)
         {
+            Console.WriteLine("[BouncyBallServer] AuthenticateClient userName={0}, password={1}", userName, password);
+
             // Always Authenticate
             return AuthResult.Pass();
         }
@@ -37,7 +40,7 @@ namespace BouncyBall.Server
 
         #region Messages
 
-        private void OnSpawnBallMessage(ISocketConnection client, CreateBallMessage message)
+        private void OnCreateBallMessage(ISocketConnection client, CreateBallMessage message)
         {
             _world.CreateBall(client, this, message);
         }

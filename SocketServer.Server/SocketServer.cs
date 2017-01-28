@@ -14,7 +14,9 @@ namespace SocketServer.Server
     {
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         private Socket _socket;
-        private readonly Dictionary<int, ClientSocketConnection> _connections = new Dictionary<int, ClientSocketConnection>();
+        private readonly Dictionary<int, ClientSocketConnection> _clients = new Dictionary<int, ClientSocketConnection>();
+
+        private int _clientIdGenerator = 0;
 
         protected SocketServer()
         {
@@ -49,14 +51,14 @@ namespace SocketServer.Server
             _lock.EnterWriteLock();
             try
             {
-                foreach (ClientSocketConnection client in _connections.Values)
+                foreach (ClientSocketConnection client in _clients.Values)
                 {
                     // Todo.. clean up shutddown logic.
                     client.Disconnect();
                     client.OnDisconnected -= HandleClientDisconnected;
                     client.OnMessage -= HandleClientMessage;
                 }
-                _connections.Clear();
+                _clients.Clear();
 
                 if (_socket != null)
                 {
@@ -78,58 +80,54 @@ namespace SocketServer.Server
 
         public IList<ISocketConnection> ConnectedClients
         {
-            get { return _connections.Values.Select(x => (ISocketConnection)x).ToList(); }
+            get { return _clients.Values.Select(x => (ISocketConnection)x).ToList(); }
         }
 
         public void DisconnectClient(int connectionId)
         {
-            RemoveConnection(connectionId);
+            RemoveClient(connectionId);
         }
 
         public void SendMessage(int connectionId, ISocketMessage message)
         {
-            Task.Factory.StartNew(() =>
+            _lock.EnterReadLock();
+            try
             {
-                _lock.EnterReadLock();
-                try
+                ClientSocketConnection client;
+                if (_clients.TryGetValue(connectionId, out client))
                 {
-                    ClientSocketConnection client;
-                    if (_connections.TryGetValue(connectionId, out client))
+                    if (client.IsAuthenticated)
                     {
-                        if (client.IsAuthenticated)
-                        {
-                            WriteMessage(client, message);  
-                        }
+                        //Console.WriteLine("[SocketServer] SendMessage {0} - {1}", client.ConnectionName, message.MessageType);
+                        WriteMessage(client, message);  
                     }
                 }
-                finally
-                {
-                    _lock.ExitReadLock();
-                }
-            });
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
         }
 
         public void SendMessageToAllClients(ISocketMessage message, int? excludedConnectionId = null)
         {
-            Task.Factory.StartNew(() =>
+            _lock.EnterReadLock();
+            try
             {
-                _lock.EnterReadLock();
-                try
+                foreach (ClientSocketConnection client in _clients.Values)
                 {
-                    foreach (ClientSocketConnection client in _connections.Values)
+                    if (client.IsAuthenticated
+                      )//  && (!excludedConnectionId.HasValue || excludedConnectionId.Value != client.ConnectionId))
                     {
-                        if (client.IsAuthenticated
-                            && (!excludedConnectionId.HasValue || excludedConnectionId.Value != client.ConnectionId))
-                        {
-                            WriteMessage(client, message);
-                        }
+                        //Console.WriteLine("[SocketServer] SendMessage {0} - {1}", client.ConnectionName, message.MessageType);
+                        WriteMessage(client, message);
                     }
                 }
-                finally
-                {
-                    _lock.ExitReadLock();
-                }
-            });
+            }
+            finally
+            {
+                _lock.ExitReadLock();
+            }
         }
 
         protected abstract AuthResult AuthenticateClient(string userName, string userToken);
@@ -151,8 +149,6 @@ namespace SocketServer.Server
 
                 // TODO: Clean up the dependency model instead of doing this hacky cast.
                 ((ClientSocketConnection) clientConnection).IsAuthenticated = true;
-
-                OnClientConnected(clientConnection);
             }
 
             AuthResponseMessage responseMessage = new AuthResponseMessage
@@ -162,7 +158,11 @@ namespace SocketServer.Server
             };
             SendMessage(clientConnection.ConnectionId, responseMessage);
 
-            if (!result.Success)
+            if (result.Success)
+            {
+                OnClientConnected(clientConnection);
+            }
+            else
             {
                 DisconnectClient(clientConnection.ConnectionId);
             }
@@ -200,45 +200,50 @@ namespace SocketServer.Server
             return socket;
         }
 
-        // TODO... something more robust
-        private int clientId = 0;
+        private void ListenForConnections()
+        {
+            if (_socket != null)
+            {
+                _socket.BeginAccept(OnSocketAccept, _socket);
+            }
+        }
 
         private void OnSocketAccept(IAsyncResult ar)
         {
-            // Get the socket that handles the client request.
-            Socket listener = (Socket)ar.AsyncState;
-            Socket clientSocket = listener.EndAccept(ar);
             try
             {
+                // Get the socket that handles the client request.
+                Socket listener = (Socket)ar.AsyncState;
+                Socket clientSocket = listener.EndAccept(ar);
+
                 Console.WriteLine("[SocketServer] Client connected from at '{0}'", clientSocket.RemoteEndPoint);
 
                 // Create the new client
-                ClientSocketConnection clientConnection = new ClientSocketConnection(clientSocket)
+                ClientSocketConnection client = new ClientSocketConnection(clientSocket)
                 {
-                    ConnectionId = ++clientId
+                    ConnectionId = Interlocked.Increment(ref _clientIdGenerator)
                 };
-                clientConnection.OnDisconnected += HandleClientDisconnected;
-                clientConnection.OnMessage += HandleClientMessage;
+                client.OnDisconnected += HandleClientDisconnected;
+                client.OnMessage += HandleClientMessage;
 
-                clientConnection.ListenForData();
+                client.ListenForData();
 
-                AddConnection(clientConnection);
+                AddClient(client);
             }
             catch (Exception e)
             {
                 Console.WriteLine("Failed to Accept Socket: {0}", e);   
             }
 
-            // Continue Listening
-            _socket.BeginAccept(OnSocketAccept, _socket);
+            ListenForConnections();
         }
 
-        private void AddConnection(ClientSocketConnection clientConnection)
+        private void AddClient(ClientSocketConnection clientConnection)
         {
             _lock.EnterWriteLock();
             try
             {
-                _connections[clientConnection.ConnectionId] = clientConnection;
+                _clients[clientConnection.ConnectionId] = clientConnection;
             }
             finally
             {
@@ -246,16 +251,16 @@ namespace SocketServer.Server
             }    
         }
 
-        private void RemoveConnection(int connectionId)
+        private void RemoveClient(int connectionId)
         {
-            ClientSocketConnection connection = null;
+            ClientSocketConnection client = null;
 
             _lock.EnterWriteLock();
             try
             {
-                if (_connections.TryGetValue(connectionId, out connection))
+                if (_clients.TryGetValue(connectionId, out client))
                 {
-                    _connections.Remove(connectionId);
+                    _clients.Remove(connectionId);
                 }
             }
             finally
@@ -264,22 +269,22 @@ namespace SocketServer.Server
             }
             
             // Kill the socket and notifiy the subclass.
-            if (connection != null)
+            if (client != null)
             {
-                connection.Disconnect();
-                if (connection.IsAuthenticated)
+                client.Disconnect();
+                if (client.IsAuthenticated)
                 {
-                    OnClientDisconnected(connection);
+                    OnClientDisconnected(client);
                 }
 
-                connection.OnDisconnected -= HandleClientDisconnected;
-                connection.OnMessage -= HandleClientMessage;
+                client.OnDisconnected -= HandleClientDisconnected;
+                client.OnMessage -= HandleClientMessage;
             }
         }
 
         private void HandleClientDisconnected(SocketConnection connection)
         {
-            RemoveConnection(connection.ConnectionId);
+            RemoveClient(connection.ConnectionId);
         }
 
         private void HandleClientMessage(SocketConnection connection, MemoryStream stream)

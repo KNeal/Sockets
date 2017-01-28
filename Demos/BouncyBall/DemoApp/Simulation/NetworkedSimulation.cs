@@ -37,7 +37,7 @@ namespace DemoApp.Simulation
             foreach (var color in colors)
             {
                 RemoteClient client = new RemoteClient(room, color, _host, _port);
-                client.Connect("RemoteClient-" + color, "password");
+                client.Connect("RemoteClient:" + color.Name, "password");
                 _remoteClients.Add(client);
             }
         }
@@ -95,6 +95,8 @@ namespace DemoApp.Simulation
                     _remoteAvatars[ball.Id] = ball;
                 }
 
+                Console.WriteLine("[NetworkedSimulation.LocalClient] OnCreateBallMessage = BallId={0}", message.BallId);
+
                 _graphicsView.Invoke(new Action(() => _graphicsView.AddBall(ball)));
             }
 
@@ -147,6 +149,8 @@ namespace DemoApp.Simulation
 
             protected override void OnConnected()
             {
+
+                Console.WriteLine("[NetworkedSimulation.RemoteClient] OnConnected - {0}", UserName);
                 Random rand = new Random();
 
                 lock (_balls)
