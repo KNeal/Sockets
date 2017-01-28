@@ -30,8 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.updateTimer = new System.Windows.Forms.Timer(this.components);
             this.graphicsView = new DemoApp.GraphicsView();
+            this.updateTimer = new System.Windows.Forms.Timer(this.components);
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -48,11 +48,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Simulation";
             // 
-            // updateTimer
-            // 
-            this.updateTimer.Enabled = true;
-            this.updateTimer.Tick += new System.EventHandler(this.updateTimer_Tick);
-            // 
             // graphicsView
             // 
             this.graphicsView.BackColor = System.Drawing.Color.LightSteelBlue;
@@ -62,6 +57,11 @@
             this.graphicsView.Size = new System.Drawing.Size(1232, 627);
             this.graphicsView.TabIndex = 0;
             // 
+            // updateTimer
+            // 
+            this.updateTimer.Enabled = true;
+            this.updateTimer.Tick += new System.EventHandler(this.updateTimer_Tick);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -70,6 +70,7 @@
             this.Controls.Add(this.groupBox1);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Form1_FormClosed);
             this.groupBox1.ResumeLayout(false);
             this.ResumeLayout(false);
 

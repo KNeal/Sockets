@@ -11,7 +11,7 @@ namespace BouncyBall.Server
         public BouncyBallServer()
         {
             RegisterMessageType<CreateBallMessage>("CreateBallMessage", OnSpawnBallMessage);
-            RegisterMessageType<UpdateBallMessage>("UpdateBallPositionMessage", OnUpdateBallPositionMessage);
+            RegisterMessageType<UpdateBallMessage>("UpdateBallMessage", OnUpdateBallPositionMessage);
         }
 
         #region Connection Management
@@ -23,7 +23,7 @@ namespace BouncyBall.Server
 
         protected override void OnClientConnected(ISocketConnection client)
         {
-            // Send the sate of the world.
+            // Send the state of the world to the client.
             _world.InitializeClient(client, this);
         }
 
@@ -37,16 +37,15 @@ namespace BouncyBall.Server
 
         #region Messages
 
-        private void OnUpdateBallPositionMessage(ISocketConnection client, UpdateBallMessage message)
-        {
-            _world.UpdateBall(client, this, message);
-        }
-
         private void OnSpawnBallMessage(ISocketConnection client, CreateBallMessage message)
         {
             _world.CreateBall(client, this, message);
         }
 
+        private void OnUpdateBallPositionMessage(ISocketConnection client, UpdateBallMessage message)
+        {
+            _world.UpdateBall(client, this, message);
+        }
 
         #endregion
     }

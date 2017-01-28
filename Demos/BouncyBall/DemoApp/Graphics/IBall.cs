@@ -4,7 +4,7 @@ namespace DemoApp
 {
     public interface IBall
     {
-        int Id { get;  }
+        string Id { get;  }
         Color Color { get; }
         double PosX { get; }
         double PosY { get; }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text;
 using BouncingBalls.Messages;
 using SocketServer;
 
@@ -49,34 +50,57 @@ namespace BouncyBall.Server.State
 
         public void CreateBall(ISocketConnection client, 
             ISocketServer server,
-            CreateBallMessage posMessage)
+            CreateBallMessage  message)
         {
             lock (_lock)
             {
-                BallState ball;
-                if (_balls.TryGetValue(posMessage.BallId, out ball))
+                string ballId = string.Format("{0}-{1}", client.ConnectionId, message.BallId);
+                BallState ball = new BallState
                 {
-                    ball.PosX = posMessage.XPos;
-                    ball.PosY = posMessage.YPos;
-                    
-                    server.SendMessageToAllClients(posMessage, client.ConnectionId);
-                }
+                    BallId = ballId,
+                    Client = client,
+                    Color = message.Color,
+                    Radius = message.Radius,
+                    PosX = message.XPos,
+                    PosY = message.YPos
+                };
+
+                _balls[ball.BallId] = ball;
+
+                CreateBallMessage m = new CreateBallMessage
+                {
+                    BallId = ballId,
+                    Color = ball.Color,
+                    Radius = ball.Radius,
+                    XPos = ball.PosX,
+                    YPos = ball.PosY
+                };
+                
+                server.SendMessageToAllClients(m, client.ConnectionId);
             }
         }
 
         public void UpdateBall(ISocketConnection client,
             ISocketServer server,
-            UpdateBallMessage posMessage)
+            UpdateBallMessage message)
         {
             lock (_lock)
             {
+                string ballId = string.Format("{0}-{1}", client.ConnectionId, message.BallId);
                 BallState ball;
-                if (_balls.TryGetValue(posMessage.BallId, out ball))
+                if (_balls.TryGetValue(ballId, out ball))
                 {
-                    ball.PosX = posMessage.XPos;
-                    ball.PosY = posMessage.YPos;
+                    ball.PosX = message.XPos;
+                    ball.PosY = message.YPos;
 
-                    server.SendMessageToAllClients(posMessage, client.ConnectionId);
+                    UpdateBallMessage m = new UpdateBallMessage
+                    {
+                        BallId = ballId,
+                        XPos = ball.PosX,
+                        YPos = ball.PosY
+                    };
+
+                    server.SendMessageToAllClients(m, client.ConnectionId);
                 }
             }
         }

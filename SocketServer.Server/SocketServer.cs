@@ -208,20 +208,29 @@ namespace SocketServer.Server
             // Get the socket that handles the client request.
             Socket listener = (Socket)ar.AsyncState;
             Socket clientSocket = listener.EndAccept(ar);
-
-            Console.WriteLine("[SocketServer] Client connected from at '{0}'", clientSocket.RemoteEndPoint);
-            
-            // Create the new client
-            ClientSocketConnection clientConnection = new ClientSocketConnection(clientSocket)
+            try
             {
-                ConnectionId = ++clientId
-            };
-            clientConnection.OnDisconnected += HandleClientDisconnected;
-            clientConnection.OnMessage += HandleClientMessage;
+                Console.WriteLine("[SocketServer] Client connected from at '{0}'", clientSocket.RemoteEndPoint);
 
-            clientConnection.ListenForData();
-            
-            AddConnection(clientConnection);
+                // Create the new client
+                ClientSocketConnection clientConnection = new ClientSocketConnection(clientSocket)
+                {
+                    ConnectionId = ++clientId
+                };
+                clientConnection.OnDisconnected += HandleClientDisconnected;
+                clientConnection.OnMessage += HandleClientMessage;
+
+                clientConnection.ListenForData();
+
+                AddConnection(clientConnection);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Failed to Accept Socket: {0}", e);   
+            }
+
+            // Continue Listening
+            _socket.BeginAccept(OnSocketAccept, _socket);
         }
 
         private void AddConnection(ClientSocketConnection clientConnection)

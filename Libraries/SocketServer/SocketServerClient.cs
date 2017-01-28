@@ -22,8 +22,8 @@ namespace SocketServer
         private SocketConnection _connection;
         private Timer _updateTimer;
 
-        private string _userName;
-        private string _password;
+        public string UserName { get; private set; }
+        public string Password { get; private set; }
         
         public State ConnectionState { get; private set; }
         public string ConnectionError { get; private set; }
@@ -35,6 +35,7 @@ namespace SocketServer
             ConnectionState = State.Disconnected;
 
             RegisterMessageType<PingRequestMessage>("PingRequestMessage", OnPingRequestMessage);
+            RegisterMessageType<PingResponseMessage>("PingResponseMessage", OnPingResponseMessage);
             RegisterMessageType<AuthResponseMessage>("AuthResponseMessage", OnAuthResponseMessage);
         }
 
@@ -43,22 +44,28 @@ namespace SocketServer
             Disconnect();
         }
 
-        private void OnPingRequestMessage(ISocketConnection connect, PingRequestMessage message)
+        protected virtual void OnPingRequestMessage(ISocketConnection connect, PingRequestMessage message)
         {
             SendMessage(new PingResponseMessage(message));
         }
 
-        private void OnAuthResponseMessage(ISocketConnection arg1, AuthResponseMessage arg2)
+        protected virtual void OnPingResponseMessage(ISocketConnection arg1, PingResponseMessage arg2)
+        {
+           // Do nothing.
+        }
+
+        protected virtual void OnAuthResponseMessage(ISocketConnection arg1, AuthResponseMessage arg2)
         {
             ConnectionState = State.Connected;
+            OnConnected();
         }
 
         public void Connect(string userName, string password)
         {
             ConnectionState = State.Connecting;
             ConnectionError = null;
-            _userName = userName;
-            _password = password;
+            UserName = userName;
+            Password = password;
             _updateTimer =  new Timer(OnUpdate, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
             CreateConnection();
         }
@@ -89,6 +96,8 @@ namespace SocketServer
             {
                 _lock.ExitWriteLock();
             }    
+
+            OnDisconnected();
         }
 
         public void SendMessage(ISocketMessage message)
@@ -99,11 +108,22 @@ namespace SocketServer
             }
         }
 
-        protected virtual void OnMessage(ISocketMessage message)
+        protected virtual void OnConnected()
         {
             
         }
+
+        protected virtual void OnDisconnected()
+        {
+
+        }
+
+        protected virtual void OnMessage(ISocketMessage message)
+        {
+
+        }
         
+
         #region Private Methods
         
         private void OnUpdate(object state)
@@ -132,7 +152,7 @@ namespace SocketServer
         private void HandleConnected(SocketConnection connection)
         {
             ConnectionState = State.Authenticating;
-            SendMessage(new AuthRequestMessage() {UserName = _userName, UserToken = _password});
+            SendMessage(new AuthRequestMessage() {UserName = UserName, UserToken = Password});
         }
 
         private void HandleDisconnected(SocketConnection connection)

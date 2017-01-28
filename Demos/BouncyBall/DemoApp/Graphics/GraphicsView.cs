@@ -12,7 +12,7 @@ namespace DemoApp
 {
     public partial class GraphicsView : UserControl
     {
-        private Dictionary<int, IBall> _balls = new Dictionary<int, IBall>();
+        private Dictionary<string, IBall> _balls = new Dictionary<string, IBall>();
 
         protected override CreateParams CreateParams
         {

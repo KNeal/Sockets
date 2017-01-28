@@ -14,12 +14,14 @@ namespace BouncingBalls.Messages
 
         public override void Serialize(Stream stream)
         {
+            BinaryUtils.WriteString(stream, BallId);
             BinaryUtils.WriteInt32(stream, XPos);
             BinaryUtils.WriteInt32(stream, YPos);
         }
 
         public override void Deserialize(Stream stream)
         {
+            BallId = BinaryUtils.ReadString(stream);
             XPos = BinaryUtils.ReadInt32(stream);
             YPos = BinaryUtils.ReadInt32(stream);
         }

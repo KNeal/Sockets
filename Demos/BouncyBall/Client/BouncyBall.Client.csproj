@@ -38,13 +38,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
+    <Compile Include="BouncyBallClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Libraries\SocketServer\SocketServer.csproj">
       <Project>{3D4048E9-EC1A-4108-893E-D43B155BACE0}</Project>
       <Name>SocketServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Messages\BouncyBall.Messages.csproj">
+      <Project>{ED62EE5C-53A6-40BB-ABA9-61FB0B091E0D}</Project>
+      <Name>BouncyBall.Messages</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

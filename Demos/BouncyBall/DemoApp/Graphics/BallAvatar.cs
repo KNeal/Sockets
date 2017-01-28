@@ -6,7 +6,7 @@ namespace DemoApp
     public class BallAvatar : IBall
     {
         // IBall
-        public int Id { get; set; }
+        public string Id { get; set; }
         public Color Color { get; set; }
         public double PosX { get; set; }
         public double PosY { get; set; }
@@ -24,13 +24,27 @@ namespace DemoApp
             PosX = PosX + VelocityX * timeElapsed;
             PosY = PosY + VelocityY * timeElapsed;
 
-            if (PosX < 0 || PosX > Room.Width)
+            if (PosX < 0)
             {
+                PosX = 0;
                 VelocityX *= -1;
             }
 
-            if (PosY < 0 || PosY > Room.Height)
+            if (PosX > Room.Width)
             {
+                PosX = Room.Width;
+                VelocityX *= -1;
+            }
+
+            if (PosY < 0)
+            {
+                PosY = 0;
+                VelocityY *= -1;
+            }
+
+            if (PosY > Room.Height)
+            {
+                PosY = Room.Height;
                 VelocityY *= -1;
             }
 

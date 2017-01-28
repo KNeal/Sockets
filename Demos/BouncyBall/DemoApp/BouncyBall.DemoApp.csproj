@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>DemoApp</RootNamespace>
     <AssemblyName>DemoApp</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -21,6 +22,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -30,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -43,28 +46,31 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BallAvatar.cs" />
-    <Compile Include="ControlRoom.cs" />
+    <Compile Include="Graphics\BallAvatar.cs" />
+    <Compile Include="Graphics\ControlRoom.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="GraphicsView.cs">
+    <Compile Include="Graphics\GraphicsView.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="GraphicsView.Designer.cs">
+    <Compile Include="Graphics\GraphicsView.Designer.cs">
       <DependentUpon>GraphicsView.cs</DependentUpon>
     </Compile>
-    <Compile Include="IBall.cs" />
-    <Compile Include="IRoom.cs" />
+    <Compile Include="Graphics\IBall.cs" />
+    <Compile Include="Graphics\IRoom.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Simulation\ISimulation.cs" />
+    <Compile Include="Simulation\LocalSimulation.cs" />
+    <Compile Include="Simulation\NetworkedSimulation.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="GraphicsView.resx">
+    <EmbeddedResource Include="Graphics\GraphicsView.resx">
       <DependentUpon>GraphicsView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -75,7 +81,9 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
+    <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -85,6 +93,28 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Libraries\SocketServer\SocketServer.csproj">
+      <Project>{3D4048E9-EC1A-4108-893E-D43B155BACE0}</Project>
+      <Name>SocketServer</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\SocketServer.Server\SocketServer.Server.csproj">
+      <Project>{AE9CFE97-4E2C-4026-9933-029CA44EC20C}</Project>
+      <Name>SocketServer.Server</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Client\BouncyBall.Client.csproj">
+      <Project>{B9C61B4A-95E9-4D3A-96B7-4FEEFFFE3935}</Project>
+      <Name>BouncyBall.Client</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Messages\BouncyBall.Messages.csproj">
+      <Project>{ED62EE5C-53A6-40BB-ABA9-61FB0B091E0D}</Project>
+      <Name>BouncyBall.Messages</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Server\BouncyBall.Server.csproj">
+      <Project>{57ABDB7E-8509-44E4-8435-603A375B9F09}</Project>
+      <Name>BouncyBall.Server</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
