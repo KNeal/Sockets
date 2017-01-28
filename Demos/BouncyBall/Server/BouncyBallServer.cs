@@ -18,7 +18,7 @@ namespace BouncyBall.Server
         #region Connection Management
         protected override AuthResult AuthenticateClient(string userName, string password)
         {
-            Console.WriteLine("[BouncyBallServer] AuthenticateClient userName={0}, password={1}", userName, password);
+            //Console.WriteLine("[BouncyBallServer] AuthenticateClient userName={0}, password={1}", userName, password);
 
             // Always Authenticate
             return AuthResult.Pass();

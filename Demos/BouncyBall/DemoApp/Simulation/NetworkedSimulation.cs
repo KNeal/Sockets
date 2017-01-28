@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Net;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using BouncingBalls.Messages;
@@ -14,6 +15,8 @@ namespace DemoApp.Simulation
 {
     public class NetworkedSimulation : ISimulation
     {
+        private static Random _random  = new Random();
+
         private string _host = Dns.GetHostName();
         private int _port = 5000;
 
@@ -151,7 +154,7 @@ namespace DemoApp.Simulation
             {
 
                 Console.WriteLine("[NetworkedSimulation.RemoteClient] OnConnected - {0}", UserName);
-                Random rand = new Random();
+
 
                 lock (_balls)
                 {
@@ -165,10 +168,10 @@ namespace DemoApp.Simulation
                             Room = _room,
                         };
 
-                        ball.PosX = rand.Next(ball.Radius, _room.Width - ball.Radius);
-                        ball.PosX = rand.Next(ball.Radius, _room.Height - ball.Radius);
-                        ball.VelocityX = rand.Next(50, 100);
-                        ball.VelocityY = rand.Next(50, 100);
+                        ball.PosX = _random.Next(ball.Radius, _room.Width - ball.Radius);
+                        ball.PosX = _random.Next(ball.Radius, _room.Height - ball.Radius);
+                        ball.VelocityX = _random.Next(50, 100);
+                        ball.VelocityY = _random.Next(50, 100);
 
                         _balls.Add(ball);
 

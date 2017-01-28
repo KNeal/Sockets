@@ -145,6 +145,11 @@ namespace SocketServer
         {
             lock (_readLock)
             {
+                if (_socket == null)
+                {
+                    return;
+                }
+
                 try
                 {
                     // Update the last message time

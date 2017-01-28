@@ -96,7 +96,7 @@ namespace SocketServer.Server
                 ClientSocketConnection client;
                 if (_clients.TryGetValue(connectionId, out client))
                 {
-                    if (client.IsAuthenticated)
+                    //if (client.IsAuthenticated)
                     {
                         //Console.WriteLine("[SocketServer] SendMessage {0} - {1}", client.ConnectionName, message.MessageType);
                         WriteMessage(client, message);  
@@ -142,28 +142,21 @@ namespace SocketServer.Server
         #region Private Methods
         private void OnAuthRequestMessage(ISocketConnection clientConnection, AuthRequestMessage message)
         {
+            // TODO: Clean up the dependency model instead of doing this hacky cast.
+            ClientSocketConnection client = ((ClientSocketConnection) clientConnection);
+
             AuthResult result = AuthenticateClient(message.UserName, message.UserToken);
             if (result.Success)
             {
-                clientConnection.ConnectionName = message.UserName;
+                client.ConnectionName = message.UserName;
+                client.IsAuthenticated = true;
 
-                // TODO: Clean up the dependency model instead of doing this hacky cast.
-                ((ClientSocketConnection) clientConnection).IsAuthenticated = true;
-            }
-
-            AuthResponseMessage responseMessage = new AuthResponseMessage
-            {
-                Success = result.Success,
-                ErrorMessage = result.Error
-            };
-            SendMessage(clientConnection.ConnectionId, responseMessage);
-
-            if (result.Success)
-            {
+                WriteMessage(client, new AuthResponseMessage {Success = true}); 
                 OnClientConnected(clientConnection);
             }
             else
             {
+                WriteMessage(client, new AuthResponseMessage { Success = false, ErrorMessage = result.Error }); 
                 DisconnectClient(clientConnection.ConnectionId);
             }
         }
