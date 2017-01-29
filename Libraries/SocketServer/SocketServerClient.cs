@@ -151,7 +151,7 @@ namespace SocketServer
         private void HandleMessage(SocketConnection connection, MemoryStream stream)
         {
             ISocketMessage message = ReadMessage(connection, stream);
-            ReadHistory.Add(message);
+            //ReadHistory.Add(message);
             OnMessage(message);
         }
 

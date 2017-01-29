@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using BouncyBall.Client;
+using SocketServer.Utils;
 
 namespace DemoApp.Simulation
 {
@@ -21,10 +22,8 @@ namespace DemoApp.Simulation
 
         protected override void OnConnected()
         {
-
-            Console.WriteLine("[NetworkedSimulation.RemoteClient] OnConnected - {0}", UserName);
-
-
+            Logger.Info("[NetworkedSimulation.RemoteClient] OnConnected - {0}", UserName);
+            
             lock (_balls)
             {
                 for (int i = 0; i < 3; ++i)

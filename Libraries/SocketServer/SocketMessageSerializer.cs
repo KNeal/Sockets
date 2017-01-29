@@ -55,13 +55,13 @@ namespace SocketServer
                 }
                 else
                 {
-                    Console.WriteLine("[MessageSocketBase] Failed to find message type: {0}", messageTypeName);
+                    Logger.Info("[MessageSocketBase] Failed to find message type: {0}", messageTypeName);
                 }
 
             }
             catch (Exception e)
             {
-                Console.WriteLine("[MessageSocketBase] Failed to deserialize message: {0}", e.Message);
+                Logger.Error("[MessageSocketBase] Failed to deserialize message: {0}", e.Message);
             }
             finally
             {
@@ -107,7 +107,7 @@ namespace SocketServer
                 ISocketMessage message = Activator.CreateInstance(_type) as ISocketMessage;
                 if (message == null)
                 {
-                    Console.WriteLine("[SocketMessageHandler] Failed to create message of type={0}", _type);
+                    Logger.Error("[SocketMessageHandler] Failed to create message of type={0}", _type);
                     return null;
                 }
                 message.MessageId = messageId;
@@ -121,7 +121,7 @@ namespace SocketServer
                     }
                     catch (Exception e)
                     {
-                        Console.WriteLine("[SocketMessageHandler] Process failure: {0}", e);
+                        Logger.Error("[SocketMessageHandler] Process failure: {0}", e);
                     }
                 }
 

@@ -2,6 +2,7 @@ using System;
 using Calculator.Messages;
 using SocketServer;
 using SocketServer.Messages;
+using SocketServer.Utils;
 
 namespace Calculator
 {
@@ -40,7 +41,7 @@ namespace Calculator
 
         private void OnAdd(ISocketConnection client, AddMessage addMessage)
         {
-            Console.WriteLine("[CalculatorServer] OnAdd: {0} + {1}", addMessage.Value1, addMessage.Value2);
+            Logger.Info("[CalculatorServer] OnAdd: {0} + {1}", addMessage.Value1, addMessage.Value2);
 
             CalculationResultMessage result = new CalculationResultMessage
             {
@@ -52,7 +53,7 @@ namespace Calculator
 
         private void OnMultiply(ISocketConnection client, MultiplyMessage addMessage)
         {
-            Console.WriteLine("[CalculatorServer] OnMultiply: {0} + {1}", addMessage.Value1, addMessage.Value2);
+            Logger.Info("[CalculatorServer] OnMultiply: {0} + {1}", addMessage.Value1, addMessage.Value2);
 
             CalculationResultMessage result = new CalculationResultMessage
             {
@@ -64,7 +65,7 @@ namespace Calculator
 
         private void OnError(ISocketConnection client, string error)
         {
-            Console.WriteLine("[CalculatorServer] OnError: {0}", error);
+            Logger.Error("[CalculatorServer] OnError: {0}", error);
 
             CalculationErrorMessage result = new CalculationErrorMessage
             {

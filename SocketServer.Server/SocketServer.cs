@@ -7,6 +7,7 @@ using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
 using SocketServer.Messages;
+using SocketServer.Utils;
 
 namespace SocketServer.Server
 {
@@ -36,7 +37,7 @@ namespace SocketServer.Server
             {
                 _socket = OpenSocket(port);
 
-                Console.WriteLine("[SocketServer] Listening at {0}", _socket.LocalEndPoint);
+                Logger.Info("[SocketServer] Listening at {0}", _socket.LocalEndPoint);
 
                 _socket.BeginAccept(OnSocketAccept, _socket);
             }
@@ -98,7 +99,7 @@ namespace SocketServer.Server
                 {
                     //if (client.IsAuthenticated)
                     {
-                        //Console.WriteLine("[SocketServer] SendMessage {0} - {1}", client.ConnectionName, message.MessageType);
+                        //Logger.Info("[SocketServer] SendMessage {0} - {1}", client.ConnectionName, message.MessageType);
                         client.Write(message, this);  
                     }
                 }
@@ -119,7 +120,7 @@ namespace SocketServer.Server
                     if (client.IsAuthenticated
                       )//  && (!excludedConnectionId.HasValue || excludedConnectionId.Value != client.ConnectionId))
                     {
-                        //Console.WriteLine("[SocketServer] SendMessage {0} - {1}", client.ConnectionName, message.MessageType);
+                        //Logger.Info("[SocketServer] SendMessage {0} - {1}", client.ConnectionName, message.MessageType);
                         WriteMessage(client, message);
                         client.Write(message, this);
                     }
@@ -200,7 +201,7 @@ namespace SocketServer.Server
                 Socket listener = (Socket)ar.AsyncState;
                 Socket clientSocket = listener.EndAccept(ar);
 
-                Console.WriteLine("[SocketServer] Client connected from at '{0}'", clientSocket.RemoteEndPoint);
+                Logger.Info("[SocketServer] Client connected from at '{0}'", clientSocket.RemoteEndPoint);
 
                 // Create the new client
                 ClientSocketConnection client = new ClientSocketConnection(clientSocket)
@@ -216,7 +217,7 @@ namespace SocketServer.Server
             }
             catch (Exception e)
             {
-                Console.WriteLine("Failed to Accept Socket: {0}", e);   
+                Logger.Error("Failed to Accept Socket: {0}", e);   
             }
 
             ListenForConnections();
@@ -299,7 +300,7 @@ namespace SocketServer.Server
             {
                 lock (WriteHistory)
                 {
-                    WriteHistory.Add(message);
+                   // WriteHistory.Add(message);
                     serializer.WriteMessage(this, message);
                 }
             }
@@ -308,7 +309,7 @@ namespace SocketServer.Server
             {
                 lock (ReadHistory)
                 {
-                    ReadHistory.Add(message);
+                    //ReadHistory.Add(message);
                 }
             }
         }

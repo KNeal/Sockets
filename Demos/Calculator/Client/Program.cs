@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading;
 using Calculator;
 using SocketServer;
+using SocketServer.Utils;
 
 namespace CalculatorClientApp
 {
@@ -44,7 +45,7 @@ namespace CalculatorClientApp
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("invalid command");
+                    Logger.Error("invalid command");
                 }
             }
         }

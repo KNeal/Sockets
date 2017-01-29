@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using BouncingBalls.Messages;
 using BouncyBall.Client;
 using SocketServer;
+using SocketServer.Utils;
 
 namespace DemoApp.Simulation
 {
@@ -34,7 +35,7 @@ namespace DemoApp.Simulation
                 _remoteAvatars[ball.Id] = ball;
             }
 
-            Console.WriteLine("[NetworkedSimulation.LocalClient] OnCreateBallMessage = BallId={0}", message.BallId);
+            Logger.Info("[NetworkedSimulation.LocalClient] OnCreateBallMessage = BallId={0}", message.BallId);
 
             _graphicsView.Invoke(new Action(() => _graphicsView.AddBall(ball)));
         }

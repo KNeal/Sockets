@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using BouncingBalls.Messages;
 using SocketServer;
+using SocketServer.Utils;
 
 namespace BouncyBall.Server.State
 {
@@ -16,7 +17,7 @@ namespace BouncyBall.Server.State
         {
             lock (_lock)
             {
-                //Console.WriteLine("[WorldState] InitializeClient: {0}, {1} Existing Balls", client.ConnectionName, _balls.Count);
+                //Logger.Info("[WorldState] InitializeClient: {0}, {1} Existing Balls", client.ConnectionName, _balls.Count);
 
                 // Send the initial state for each ball.
                 foreach (var ball in _balls.Values)
@@ -82,7 +83,7 @@ namespace BouncyBall.Server.State
                     YPos = ball.PosY
                 };
 
-                Console.WriteLine("[WorldState] AddBall: {0} - {1}, Total={2}", client.ConnectionName, ballId, _balls.Count);
+                Logger.Info("[WorldState] AddBall: {0} - {1}, Total={2}", client.ConnectionName, ballId, _balls.Count);
 
                 server.SendMessageToAllClients(m, client.ConnectionId);
             }

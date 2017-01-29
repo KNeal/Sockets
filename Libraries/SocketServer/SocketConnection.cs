@@ -68,7 +68,7 @@ namespace SocketServer
             {
                 _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 _socket.BeginConnect(host, port, OnConnect, this);
-                Console.WriteLine("[SocketConnection] Attempting to connecting to {0}:{1}", port, host);
+                Logger.Info("[SocketConnection] Attempting to connecting to {0}:{1}", port, host);
             }
         }
 
@@ -136,13 +136,13 @@ namespace SocketServer
                     _socket.EndConnect(ar);
                     ListenForData();
 
-                    Console.WriteLine("[SocketConnection] Successfully connected to {0}", _socket.RemoteEndPoint);
+                    Logger.Info("[SocketConnection] Successfully connected to {0}", _socket.RemoteEndPoint);
 
                     SetConnectionState(State.Connected);
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("[SocketConnection] OnConnect Failed: {0}", e);
+                    Logger.Error("[SocketConnection] OnConnect Failed: {0}", e);
                 }
             }
         }
@@ -196,7 +196,7 @@ namespace SocketServer
                                         }
                                         catch (Exception e)
                                         {
-                                            Console.WriteLine("[SocketConnection] OnMessage Handler Error: {0}", e);
+                                            Logger.Error("[SocketConnection] OnMessage Handler Error: {0}", e);
                                         }
                                     }
 
@@ -211,7 +211,7 @@ namespace SocketServer
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("[SocketConnection] OnRecieve Failed: {0}", e);
+                    Logger.Error("[SocketConnection] OnRecieve Failed: {0}", e);
                 }
 
                 ListenForData();

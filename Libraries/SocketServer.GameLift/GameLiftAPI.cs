@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using System.Text;
+using SocketServer.Utils;
 
 namespace SocketServer.GameLift
 {
@@ -155,13 +156,13 @@ namespace SocketServer.GameLift
             {
                 try
                 {
-                    Console.WriteLine("[GameLiftAPI] onGameSessionStart called");
+                    Logger.Info("[GameLiftAPI] onGameSessionStart called");
                     GameSession gameSession = ReadGameSession("onGameSessionStart", pGameSession);
                     onGameSessionStart(gameSession);
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("[GameLiftAPI] onGameSessionStart failed: {0}", e);
+                    Logger.Error("[GameLiftAPI] onGameSessionStart failed: {0}", e);
                 }
             };
 
@@ -169,12 +170,12 @@ namespace SocketServer.GameLift
             {
                 try
                 {
-                    Console.WriteLine("[GameLiftAPI] onProcessTerminate called");
+                    Logger.Info("[GameLiftAPI] onProcessTerminate called");
                     onProcessTerminate();
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("[GameLiftAPI] onProcessTerminate failed: {0}", e);
+                    Logger.Error("[GameLiftAPI] onProcessTerminate failed: {0}", e);
                 }
             };
 
@@ -182,12 +183,12 @@ namespace SocketServer.GameLift
             {
                 try
                 {
-                    Console.WriteLine("GameLiftAPI] onHealthCheck called");
+                    Logger.Info("GameLiftAPI] onHealthCheck called");
                     return onHealthCheck();
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine("[GameLiftAPI] onHealthCheck  failed: {0}", e);
+                    Logger.Error("[GameLiftAPI] onHealthCheck  failed: {0}", e);
                     return false;
                 }
             };
@@ -270,7 +271,7 @@ namespace SocketServer.GameLift
             }
             else
             {
-                Console.WriteLine("[GameLiftAPI] {0} Outcome object is null", functionName);
+                Logger.Error("[GameLiftAPI] {0} Outcome object is null", functionName);
             }
 
             return value;
@@ -289,14 +290,14 @@ namespace SocketServer.GameLift
                     GameLiftErrorType error = NativeAPI.aws_gamelift__AwsGenericOutcome_GetErrorType(pOutcome);
                     NativeAPI.aws_gamelift__AwsGenericOutcome_GetErrorMessage(pOutcome, sb.Capacity, sb);
 
-                    Console.WriteLine("[GameLiftAPI] {0} Failed. Error: {1}, Message: {2}", functionName, error, sb.ToString());
+                    Logger.Error("[GameLiftAPI] {0} Failed. Error: {1}, Message: {2}", functionName, error, sb.ToString());
                 }
 
                 NativeAPI.aws_gamelift__AwsGenericOutcome_Delete(pOutcome);
             }
             else
             {
-                 Console.WriteLine("[GameLiftAPI] {0} Outcome object is null", functionName);
+                Logger.Error("[GameLiftAPI] {0} Outcome object is null", functionName);
             }
 
             return success;
@@ -319,14 +320,14 @@ namespace SocketServer.GameLift
                     NativeAPI.aws_gamelift__InitSDKOutcome_GetErrorMessage(pOutcome, sb.Capacity, sb);
                     string errorMessage = sb.ToString();
 
-                    Console.WriteLine("[GameLiftAPI] {0} GameLiftError: {1}, Message: {2}", functionName, error, errorMessage);
+                    Logger.Error("[GameLiftAPI] {0} GameLiftError: {1}, Message: {2}", functionName, error, errorMessage);
                 }
 
                 NativeAPI.aws_gamelift__InitSDKOutcome_Delete(pOutcome);
             }
             else
             {
-                Console.WriteLine("[GameLiftAPI] {0} Outcome object is null", functionName);
+                Logger.Error("[GameLiftAPI] {0} Outcome object is null", functionName);
             }
 
             return pServerState != IntPtr.Zero;
@@ -380,7 +381,7 @@ namespace SocketServer.GameLift
             else
             {
                 gameSession = null;
-                Console.WriteLine("[GameLiftAPI] {0} GameSession object is null", functionName);
+                Logger.Error("[GameLiftAPI] {0} GameSession object is null", functionName);
             }
 
             return gameSession;

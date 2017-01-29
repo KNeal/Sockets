@@ -48,7 +48,7 @@ namespace DemoApp
                 VelocityY *= -1;
             }
 
-           // Console.WriteLine("[BallAvatar] {0}: X={1}, Y={2}", Id, PosX, PosY);
+            // Logger.Info("[BallAvatar] {0}: X={1}, Y={2}", Id, PosX, PosY);
         }
     }
 }

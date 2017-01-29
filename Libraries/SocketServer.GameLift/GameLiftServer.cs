@@ -1,4 +1,5 @@
 using System;
+using SocketServer.Utils;
 
 namespace SocketServer.GameLift
 {
@@ -13,17 +14,17 @@ namespace SocketServer.GameLift
 
         private void OnGameSessionStart(GameSession gameSession)
         {
-            Console.WriteLine("[GameLiftServer] OnGameSessionStart");
+            Logger.Info("[GameLiftServer] OnGameSessionStart");
         }
 
         private void OnProcessTerminate()
         {
-            Console.WriteLine("[GameLiftServer] OnProcessTerminate");
+            Logger.Info("[GameLiftServer] OnProcessTerminate");
         }
 
         private bool OnHealth()
         {
-            Console.WriteLine("[GameLiftServer] OnHealth");
+            Logger.Info("[GameLiftServer] OnHealth");
             return true;
         }
     }

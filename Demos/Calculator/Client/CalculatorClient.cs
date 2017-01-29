@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Calculator.Messages;
 using SocketServer;
 using SocketServer.Messages;
+using SocketServer.Utils;
 
 namespace Calculator
 {
@@ -20,7 +21,7 @@ namespace Calculator
 
         private void OnCalculationResultMessage(ISocketConnection connection, CalculationResultMessage message)
         {
-            Console.WriteLine("[CalculatorClient] Result: {0}", message.Value);
+            Logger.Info("[CalculatorClient] Result: {0}", message.Value);
 
             lock (ResultHistory)
             {
@@ -30,12 +31,12 @@ namespace Calculator
 
         private void OnCalculationErrorMessage(ISocketConnection connection, CalculationErrorMessage message)
         {
-            Console.WriteLine("[CalculatorClient] Error: {0}", message.Message);
+            Logger.Info("[CalculatorClient] Error: {0}", message.Message);
         }
 
         private void OnPingResponseMessage(ISocketConnection connection, PingResponseMessage message)
         {
-            Console.WriteLine("[CalculatorClient] Ping Time: {0}ms", message.ElapsedTime.TotalMilliseconds);
+            Logger.Info("[CalculatorClient] Ping Time: {0}ms", message.ElapsedTime.TotalMilliseconds);
         }
 
         public void Add(int value1, int value2)
