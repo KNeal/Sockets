@@ -26,8 +26,8 @@ namespace BouncyBall.Server.State
                         BallId = ball.BallId,
                         Color = ball.Color,
                         Radius = ball.Radius,
-                        XPos = ball.Radius,
-                        YPos = ball.Radius
+                        XPos = ball.PosX,
+                        YPos = ball.PosY
                     });
                 }
             }
@@ -75,14 +75,14 @@ namespace BouncyBall.Server.State
 
                 CreateBallMessage m = new CreateBallMessage
                 {
-                    BallId = ballId,
+                    BallId = ball.BallId,
                     Color = ball.Color,
                     Radius = ball.Radius,
                     XPos = ball.PosX,
                     YPos = ball.PosY
                 };
 
-                //Console.WriteLine("[WorldState] AddBall: {0} - {1}, Total={2}", client.ConnectionName, ballId, _balls.Count);
+                Console.WriteLine("[WorldState] AddBall: {0} - {1}, Total={2}", client.ConnectionName, ballId, _balls.Count);
 
                 server.SendMessageToAllClients(m, client.ConnectionId);
             }

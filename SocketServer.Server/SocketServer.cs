@@ -99,7 +99,7 @@ namespace SocketServer.Server
                     //if (client.IsAuthenticated)
                     {
                         //Console.WriteLine("[SocketServer] SendMessage {0} - {1}", client.ConnectionName, message.MessageType);
-                        WriteMessage(client, message);  
+                        client.Write(message, this);  
                     }
                 }
             }
@@ -121,6 +121,7 @@ namespace SocketServer.Server
                     {
                         //Console.WriteLine("[SocketServer] SendMessage {0} - {1}", client.ConnectionName, message.MessageType);
                         WriteMessage(client, message);
+                        client.Write(message, this);
                     }
                 }
             }
@@ -151,12 +152,12 @@ namespace SocketServer.Server
                 client.ConnectionName = message.UserName;
                 client.IsAuthenticated = true;
 
-                WriteMessage(client, new AuthResponseMessage {Success = true}); 
+                client.Write(new AuthResponseMessage {Success = true}, this); 
                 OnClientConnected(clientConnection);
             }
             else
             {
-                WriteMessage(client, new AuthResponseMessage { Success = false, ErrorMessage = result.Error }); 
+                client.Write(new AuthResponseMessage { Success = false, ErrorMessage = result.Error }, this);  
                 DisconnectClient(clientConnection.ConnectionId);
             }
         }
@@ -164,16 +165,6 @@ namespace SocketServer.Server
         private void OnPingRequestMessage(ISocketConnection client, PingRequestMessage message)
         {
             SendMessage(client.ConnectionId, new PingResponseMessage(message));
-        }
-
-        private class ClientSocketConnection : SocketConnection
-        {
-            public bool IsAuthenticated { get; set; }
-
-            public ClientSocketConnection(Socket socket) 
-                : base(socket)
-            {
-            }
         }
 
         private Socket OpenSocket(int port)
@@ -282,8 +273,45 @@ namespace SocketServer.Server
 
         private void HandleClientMessage(SocketConnection connection, MemoryStream stream)
         {
-            ReadMessage(connection, stream);
+            // TODO.. address hacky cast
+            ClientSocketConnection client = connection as ClientSocketConnection;
+            ISocketMessage message = ReadMessage(connection, stream);
+            client.Read(message);
         }
+
         #endregion
+
+#region Private Classes
+
+        private class ClientSocketConnection : SocketConnection
+        {
+            public bool IsAuthenticated { get; set; }
+
+            public List<ISocketMessage> WriteHistory = new List<ISocketMessage>();
+            public List<ISocketMessage> ReadHistory = new List<ISocketMessage>();
+
+            public ClientSocketConnection(Socket socket)
+                : base(socket)
+            {
+            }
+            
+            public void Write(ISocketMessage message, SocketMessageSerializer serializer)
+            {
+                lock (WriteHistory)
+                {
+                    WriteHistory.Add(message);
+                    serializer.WriteMessage(this, message);
+                }
+            }
+
+            public void Read(ISocketMessage message)
+            {
+                lock (ReadHistory)
+                {
+                    ReadHistory.Add(message);
+                }
+            }
+        }
+#endregion
     }
 }

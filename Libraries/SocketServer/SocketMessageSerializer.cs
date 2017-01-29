@@ -14,7 +14,7 @@ namespace SocketServer
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         private readonly Dictionary<string, MessageTypeHandler> _messageTypes = new Dictionary<string, MessageTypeHandler>();
 
-        protected void RegisterMessageType<T>(string messageId, Action<ISocketConnection, T> messageHandler) where T : ISocketMessage
+        public void RegisterMessageType<T>(string messageId, Action<ISocketConnection, T> messageHandler) where T : ISocketMessage
         {
             _lock.EnterWriteLock();
             try
@@ -38,19 +38,20 @@ namespace SocketServer
             }
         }
 
-        protected void ReadMessage(SocketConnection connection, Stream stream)
+        public ISocketMessage ReadMessage(SocketConnection connection, Stream stream)
         {
             _lock.EnterReadLock();
             try
             {
                 // Read the Header
+                UInt64 messageId = BinaryUtils.ReadUInt64(stream);
                 string messageTypeName = BinaryUtils.ReadString(stream);
 
                 // Read the Message
                 MessageTypeHandler messageTypeHandler;
                 if (_messageTypes.TryGetValue(messageTypeName, out messageTypeHandler))
                 {
-                    messageTypeHandler.ReadMessage(connection, stream);
+                    return messageTypeHandler.ReadMessage(connection, stream, messageId);
                 }
                 else
                 {
@@ -66,12 +67,15 @@ namespace SocketServer
             {
                 _lock.ExitReadLock();
             }
+
+            return null;
         }
 
-        protected void WriteMessage(SocketConnection connection, ISocketMessage message)
+        public virtual void WriteMessage(SocketConnection connection, ISocketMessage message)
         {
             connection.WriteMessage((stream) =>
             {
+                BinaryUtils.WriteUInt64(stream, message.MessageId);
                 BinaryUtils.WriteString(stream, message.MessageType);
                 message.Serialize(stream);
             });
@@ -81,7 +85,7 @@ namespace SocketServer
 
         private abstract class MessageTypeHandler
         {
-            public abstract void ReadMessage(ISocketConnection connection, Stream stream);
+            public abstract ISocketMessage ReadMessage(ISocketConnection connection, Stream stream, UInt64 messageId);
         }
 
         private class MessageTypeHandler<T> : MessageTypeHandler where T : ISocketMessage
@@ -98,15 +102,15 @@ namespace SocketServer
                 }
             }
 
-            public override void ReadMessage(ISocketConnection connection, Stream stream)
+            public override ISocketMessage ReadMessage(ISocketConnection connection, Stream stream, UInt64 messageId)
             {
                 ISocketMessage message = Activator.CreateInstance(_type) as ISocketMessage;
                 if (message == null)
                 {
                     Console.WriteLine("[SocketMessageHandler] Failed to create message of type={0}", _type);
-                    return;
+                    return null;
                 }
-
+                message.MessageId = messageId;
                 message.Deserialize(stream);
 
                 foreach (Action<ISocketConnection,T> messageHandler in _messageHandlers)
@@ -120,6 +124,8 @@ namespace SocketServer
                         Console.WriteLine("[SocketMessageHandler] Process failure: {0}", e);
                     }
                 }
+
+                return message;                
             }
         }
         #endregion

@@ -60,6 +60,7 @@
     <Compile Include="SocketMessageSerializer.cs" />
     <Compile Include="SocketServerClient.cs" />
     <Compile Include="SocketConnection.cs" />
+    <Compile Include="Utils\Logger.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Server\" />

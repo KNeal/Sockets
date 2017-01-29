@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using SocketServer.Messages;
@@ -27,6 +28,9 @@ namespace SocketServer
         
         public State ConnectionState { get; private set; }
         public string ConnectionError { get; private set; }
+
+        // Debugging
+        public List<ISocketMessage> ReadHistory = new List<ISocketMessage>();
 
         protected SocketServerClient(string host, int port)
         {
@@ -136,6 +140,7 @@ namespace SocketServer
         private void CreateConnection()
         {
             _connection = new SocketConnection();
+            _connection.ConnectionName = string.Format("Client:{0}", UserName);
             _connection.OnConnected += HandleConnected;
             _connection.OnDisconnected += HandleDisconnected;
             _connection.OnMessage += HandleMessage;
@@ -145,7 +150,9 @@ namespace SocketServer
 
         private void HandleMessage(SocketConnection connection, MemoryStream stream)
         {
-            ReadMessage(connection, stream);
+            ISocketMessage message = ReadMessage(connection, stream);
+            ReadHistory.Add(message);
+            OnMessage(message);
         }
 
         private void HandleConnected(SocketConnection connection)

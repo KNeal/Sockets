@@ -52,6 +52,40 @@ namespace SocketServer.Utils
             return BitConverter.ToInt64(bytes, 0);
         }
 
+        public static void WriteUInt32(Stream stream, UInt32 value)
+        {
+            byte[] bytes = BitConverter.GetBytes(value);
+            stream.Write(bytes, 0, bytes.Length);
+        }
+
+        public static UInt32 ReadUInt32(Stream stream)
+        {
+            byte[] bytes = new byte[sizeof(UInt32)];
+            for (int i = 0; i < bytes.Length; ++i)
+            {
+                bytes[i] = (byte)stream.ReadByte();
+            }
+
+            return BitConverter.ToUInt32(bytes, 0);
+        }
+
+        public static void WriteUInt64(Stream stream, UInt64 value)
+        {
+            byte[] bytes = BitConverter.GetBytes(value);
+            stream.Write(bytes, 0, bytes.Length);
+        }
+
+        public static UInt64 ReadUInt64(Stream stream)
+        {
+            byte[] bytes = new byte[sizeof(UInt64)];
+            for (int i = 0; i < bytes.Length; ++i)
+            {
+                bytes[i] = (byte)stream.ReadByte();
+            }
+
+            return BitConverter.ToUInt64(bytes, 0);
+        }
+
         public static void WriteString(Stream stream, string value)
         {
             if (value == null)
