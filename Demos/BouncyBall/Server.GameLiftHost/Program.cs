@@ -79,7 +79,7 @@ namespace BouncyBall.Server.GameLiftHost
 
             protected override void OnClientDisconnected(ISocketConnection client)
             {
-                base.OnClientConnected(client);
+                base.OnClientDisconnected(client);
                 GameLiftAPI.RemovePlayerSession(client.ConnectionName);
             }
         }
