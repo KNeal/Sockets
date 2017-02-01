@@ -31,10 +31,12 @@ namespace DemoApp.Simulation
             
             IRoom room = new ControlRoom(graphicsView);
 
-            Color[] colors = new[] {Color.Blue, Color.Teal, Color.BlueViolet, Color.Yellow, Color.Red, Color.Orange};
+            const int ballsPerClient = 10;
+            Color[] colors = new[] {Color.Blue, Color.Teal, Color.BlueViolet, Color.Yellow, Color.Red, 
+                Color.Orange, Color.Green, Color.DarkMagenta, Color.Coral, Color.Goldenrod};
             foreach (var color in colors)
             {
-                RemoteClient client = new RemoteClient(room, color, _host, _port);
+                RemoteClient client = new RemoteClient(room, color, ballsPerClient, _host, _port);
                 client.Connect("RemoteClient:" + color.Name, "password");
                 _remoteClients.Add(client);
             }

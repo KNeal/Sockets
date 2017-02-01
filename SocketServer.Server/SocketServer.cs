@@ -121,7 +121,6 @@ namespace SocketServer.Server
                       )//  && (!excludedConnectionId.HasValue || excludedConnectionId.Value != client.ConnectionId))
                     {
                         //Logger.Info("[SocketServer] SendMessage {0} - {1}", client.ConnectionName, message.MessageType);
-                        WriteMessage(client, message);
                         client.Write(message, this);
                     }
                 }
@@ -311,6 +310,11 @@ namespace SocketServer.Server
                 {
                     //ReadHistory.Add(message);
                 }
+            }
+
+            public override string ToString()
+            {
+                return ConnectionName;
             }
         }
 #endregion

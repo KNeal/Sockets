@@ -65,7 +65,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Simulation\ISimulation.cs" />
-    <Compile Include="Simulation\LocalSimulation.cs" />
+    <Compile Include="Simulation\Local\LocalSimulation.cs" />
     <Compile Include="Simulation\Network\LocalClient.cs" />
     <Compile Include="Simulation\Network\NetworkedSimulation.cs" />
     <Compile Include="Simulation\Network\Utils.cs" />

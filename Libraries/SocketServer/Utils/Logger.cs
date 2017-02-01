@@ -10,7 +10,7 @@ namespace SocketServer.Utils
     public static class Logger
     {
         private static object _fileLock = new object();
-        private static string _logFile;
+        private static string _logFile = null;
 
         public static void Initialize(string logFile)
         {
@@ -19,12 +19,12 @@ namespace SocketServer.Utils
 
         public static void Info(string format, params object[] args)
         {
-         
+            Log("INFO", format, args);
         }
 
         public static void Error(string format, params object[] args)
         {
-
+            Log("ERROR", format, args);
         }
 
         public static void Log(string level, string format, params object[] args)
@@ -41,7 +41,7 @@ namespace SocketServer.Utils
 
             lock (_fileLock)
             {
-                if (string.IsNullOrEmpty(_logFile))
+                if (!string.IsNullOrEmpty(_logFile))
                 {
                     File.AppendAllText(_logFile, message);
                 }

@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace SocketServer.Utils
@@ -64,6 +65,17 @@ namespace SocketServer.Utils
             for (int i = 0; i < bytes.Length; ++i)
             {
                 bytes[i] = (byte)stream.ReadByte();
+            }
+
+            return BitConverter.ToUInt32(bytes, 0);
+        }
+
+        public static UInt32 ReadUInt32(byte[] buffer, int bufferLen, ref int index)
+        {
+            byte[] bytes = new byte[sizeof(UInt32)];
+            for (int i = 0; i < bytes.Length; ++i)
+            {
+                bytes[i] = buffer[index++];
             }
 
             return BitConverter.ToUInt32(bytes, 0);

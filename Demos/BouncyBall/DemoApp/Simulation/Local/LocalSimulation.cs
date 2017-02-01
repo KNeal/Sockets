@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace DemoApp.Simulation
+namespace DemoApp.Simulation.Local
 {
     public class LocalSimulation : ISimulation
     {

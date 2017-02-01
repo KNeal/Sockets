@@ -35,7 +35,7 @@ namespace DemoApp.Simulation
                 _remoteAvatars[ball.Id] = ball;
             }
 
-            Logger.Info("[NetworkedSimulation.LocalClient] OnCreateBallMessage = BallId={0}", message.BallId);
+            //Logger.Info("[NetworkedSimulation.LocalClient] OnCreateBallMessage = BallId={0}", message.BallId);
 
             _graphicsView.Invoke(new Action(() => _graphicsView.AddBall(ball)));
         }

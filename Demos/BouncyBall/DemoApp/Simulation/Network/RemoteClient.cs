@@ -10,14 +10,16 @@ namespace DemoApp.Simulation
     {
         private IRoom _room;
         private Color _color;
+        private int _ballCount;
         private List<BallAvatar> _balls = new List<BallAvatar>();
         private DateTime _lastUpdateTime;
 
-        public RemoteClient(IRoom room, Color color, string host, int port)
+        public RemoteClient(IRoom room, Color color, int ballCount, string host, int port)
             : base(host, port)
         {
             _room = room;
             _color = color;
+            _ballCount = ballCount;
         }
 
         protected override void OnConnected()
@@ -26,7 +28,7 @@ namespace DemoApp.Simulation
             
             lock (_balls)
             {
-                for (int i = 0; i < 3; ++i)
+                for (int i = 0; i < _ballCount; ++i)
                 {
                     BallAvatar ball = new BallAvatar()
                     {

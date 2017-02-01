@@ -83,7 +83,7 @@ namespace BouncyBall.Server.State
                     YPos = ball.PosY
                 };
 
-                Logger.Info("[WorldState] AddBall: {0} - {1}, Total={2}", client.ConnectionName, ballId, _balls.Count);
+                //Logger.Info("[WorldState] AddBall: {0} - {1}, Total={2}", client.ConnectionName, ballId, _balls.Count);
 
                 server.SendMessageToAllClients(m, client.ConnectionId);
             }

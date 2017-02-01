@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Net.Sockets;
+using System.Security.Principal;
 using SocketServer.Utils;
 
 namespace SocketServer
@@ -32,8 +33,11 @@ namespace SocketServer
         private readonly object _writeLock = new object();
         private readonly object _readLock = new object();
         private Socket _socket;
-        private MessageReader _readMessage;
+
+        private const int MessageHeaderSize = sizeof (UInt32);
         private readonly byte[] _readBuffer;
+        private int _readMessageLength;
+        private int _readMessageLengthRead;
         private readonly MemoryStream _readStream;
         private readonly MemoryStream _writeStream;
 
@@ -97,7 +101,7 @@ namespace SocketServer
 
                 // Add a Placeholder header
                 _writeStream.SetLength(0);
-                BinaryUtils.WriteUInt64(_writeStream, 0);
+                BinaryUtils.WriteUInt32(_writeStream, 0);
                 
                 // Write the data & calculate the length
                 long lenBeforeData = _writeStream.Length;
@@ -106,7 +110,7 @@ namespace SocketServer
                 
                 // Overwite the header with the true value
                 _writeStream.Seek(0, SeekOrigin.Begin);
-                BinaryUtils.WriteUInt64(_writeStream, (UInt64)dataLen);
+                BinaryUtils.WriteUInt32(_writeStream, (UInt32)dataLen);
                 _writeStream.Seek(0, SeekOrigin.End);
 
                 // Send the message
@@ -162,37 +166,52 @@ namespace SocketServer
                     LastMessageTime = DateTime.UtcNow;
 
                     // Read data from the client socket. 
-                    int bytesRead = _socket.EndReceive(ar);
-                    if (bytesRead > 0)
+                    int bytesRecieved = _socket.EndReceive(ar);
+                    if (bytesRecieved > 0)
                     {
-                        _readStream.Write(_readBuffer, 0, bytesRead);
-                        _readStream.Seek(0, 0);
-
-                        // Process the data
-                        while (_readStream.Position < _readStream.Length)
+                        int readIndex = 0;
+                        while (readIndex < bytesRecieved)
                         {
                             // Read the header
-                            if (_readMessage == null)
+                            if (_readMessageLength == 0)
                             {
-                                _readMessage = new MessageReader
+                                // The message header might be split across multiple callbacks, so always cache it to
+                                // the stream first.
+                                int readLen = Math.Min(MessageHeaderSize - (int)_readStream.Length, bytesRecieved - readIndex);
+                                _readStream.Write(_readBuffer, readIndex, readLen);
+                                readIndex += readLen;
+
+                                if (_readStream.Length == MessageHeaderSize)
                                 {
-                                    Data = new byte[BinaryUtils.ReadUInt64(_readStream) ]                           
-                                };
+                                    // Parse the header
+                                    _readStream.Seek(0, SeekOrigin.Begin);
+                                    _readMessageLength = (int)BinaryUtils.ReadUInt32(_readStream);
+
+                                    // Reset for the message data.
+                                    _readStream.SetLength(0);
+                                }
                             }
-                            else
+
+                            // Read the Mesage Data
+                            if (_readMessageLength > 0)
                             {
-                                // Read the Mesage Data
-                                _readMessage.ReadFromStream(_readStream);
-                                if(_readMessage.IsComplete)
+                                int bytesAvailable = (int)(bytesRecieved - readIndex);
+                                int readLen = Math.Min(bytesAvailable, _readMessageLength - _readMessageLengthRead);
+                                _readStream.Write(_readBuffer, readIndex, readLen);
+                                _readMessageLengthRead += readLen;
+                                readIndex += readLen;
+
+                                // Handle a completed message
+                                if (_readMessageLength == _readMessageLengthRead)
                                 {
+                                    // Process the message
                                     MessageCallback callback = OnMessage;
                                     if (callback != null)
                                     {
                                         try
                                         {
-                                            // TODO.. cleanup the data management to avoid having to cast back
-                                            // to a stream.
-                                            callback(this, new MemoryStream(_readMessage.Data));
+                                            _readStream.Seek(0, SeekOrigin.Begin);
+                                            callback(this, _readStream);
                                         }
                                         catch (Exception e)
                                         {
@@ -200,13 +219,13 @@ namespace SocketServer
                                         }
                                     }
 
-                                    _readMessage = null;
+                                    // Reset for the next message
+                                    _readMessageLength = 0;
+                                    _readMessageLengthRead = 0;
+                                    _readStream.SetLength(0);
                                 }
                             }
                         }
-
-                        // Reset the read stream 
-                        _readStream.SetLength(0);
                     }
                 }
                 catch (Exception e)
@@ -237,34 +256,6 @@ namespace SocketServer
             if (callback != null)
             {
                 callback(this);
-            }
-        }
-        #endregion
-
-        #region PrivateClasses
-
-        public class MessageReader
-        {
-            public byte[] Data { get; set; }
-            public int WriteIndex { get; set; }
-
-            public long BytesRemaining
-            {
-                get { return Data.Length - WriteIndex; }
-            }
-
-            public bool IsComplete
-            {
-                get { return BytesRemaining == 0; }
-            }
-
-            public void ReadFromStream(MemoryStream stream)
-            {
-                int bytesAvailable = (int)(stream.Length - stream.Position);
-                int messageBytesToRead = Math.Min(bytesAvailable, (int)BytesRemaining);
-
-                stream.Read(Data, WriteIndex, messageBytesToRead);
-                WriteIndex += messageBytesToRead;
             }
         }
         #endregion
