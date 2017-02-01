@@ -5,7 +5,6 @@ using System.Linq;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using System.Threading.Tasks;
 using SocketServer.Messages;
 using SocketServer.Utils;
 
@@ -14,15 +13,14 @@ namespace SocketServer.Server
     public abstract class SocketServer : SocketMessageSerializer, ISocketServer, IDisposable
     {
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
-        private Socket _socket;
         private readonly Dictionary<int, ClientSocketConnection> _clients = new Dictionary<int, ClientSocketConnection>();
-
-        private int _clientIdGenerator = 0;
-
+        private Socket _listenSocket;
+        private int _clientIdGenerator;
+        
         protected SocketServer()
         {
-            RegisterMessageType<PingRequestMessage>("PingRequestMessage", OnPingRequestMessage);
-            RegisterMessageType<AuthRequestMessage>("AuthRequestMessage", OnAuthRequestMessage);
+            RegisterMessageType<PingRequestMessage>(OnPingRequestMessage);
+            RegisterMessageType<AuthRequestMessage>(OnAuthRequestMessage);
         }
         
         public void Dispose()
@@ -35,11 +33,11 @@ namespace SocketServer.Server
             _lock.EnterWriteLock();
             try
             {
-                _socket = OpenSocket(port);
+                _listenSocket = OpenSocket(port);
 
-                Logger.Info("[SocketServer] Listening at {0}", _socket.LocalEndPoint);
+                Logger.Info("[SocketServer] Listening at {0}", _listenSocket.LocalEndPoint);
 
-                _socket.BeginAccept(OnSocketAccept, _socket);
+                _listenSocket.BeginAccept(OnSocketAccept, _listenSocket);
             }
             finally
             {
@@ -61,11 +59,11 @@ namespace SocketServer.Server
                 }
                 _clients.Clear();
 
-                if (_socket != null)
+                if (_listenSocket != null)
                 {
-                    _socket.Shutdown(SocketShutdown.Both);
-                    _socket.Close();
-                    _socket = null;
+                    _listenSocket.Shutdown(SocketShutdown.Both);
+                    _listenSocket.Close();
+                    _listenSocket = null;
                 }
             }
             catch (SocketException)
@@ -97,11 +95,7 @@ namespace SocketServer.Server
                 ClientSocketConnection client;
                 if (_clients.TryGetValue(connectionId, out client))
                 {
-                    //if (client.IsAuthenticated)
-                    {
-                        //Logger.Info("[SocketServer] SendMessage {0} - {1}", client.ConnectionName, message.MessageType);
-                        client.Write(message, this);  
-                    }
+                    WriteMessage(client, message);  
                 }
             }
             finally
@@ -117,12 +111,19 @@ namespace SocketServer.Server
             {
                 foreach (ClientSocketConnection client in _clients.Values)
                 {
-                    if (client.IsAuthenticated
-                      )//  && (!excludedConnectionId.HasValue || excludedConnectionId.Value != client.ConnectionId))
+                    try
                     {
-                        //Logger.Info("[SocketServer] SendMessage {0} - {1}", client.ConnectionName, message.MessageType);
-                        client.Write(message, this);
+                        if (client.IsAuthenticated
+                            && (!excludedConnectionId.HasValue || excludedConnectionId.Value != client.ConnectionId))
+                        {
+                            WriteMessage(client, message);
+                        }
                     }
+                    catch (Exception e)
+                    {
+                        Logger.Error("[SocketServer] Failed to send message to client {0}", e.Message);
+                    }
+                  
                 }
             }
             finally
@@ -152,12 +153,12 @@ namespace SocketServer.Server
                 client.ConnectionName = message.UserName;
                 client.IsAuthenticated = true;
 
-                client.Write(new AuthResponseMessage {Success = true}, this); 
+                WriteMessage(client, new AuthResponseMessage {Success = true}); 
                 OnClientConnected(clientConnection);
             }
             else
             {
-                client.Write(new AuthResponseMessage { Success = false, ErrorMessage = result.Error }, this);  
+                WriteMessage(client, new AuthResponseMessage { Success = false, ErrorMessage = result.Error });  
                 DisconnectClient(clientConnection.ConnectionId);
             }
         }
@@ -175,7 +176,7 @@ namespace SocketServer.Server
             IPEndPoint localEndPoint = new IPEndPoint(ipAddress, port);
 
             // Create a TCP/IP socket.
-            Socket socket = new Socket(AddressFamily.InterNetwork,  SocketType.Stream, ProtocolType.Tcp );
+            Socket socket = new Socket(AddressFamily.InterNetwork,  SocketType.Stream, ProtocolType.Tcp);
 
             // Bind the socket to the local endpoint and listen for incoming connections.
             socket.Bind(localEndPoint);
@@ -186,9 +187,9 @@ namespace SocketServer.Server
 
         private void ListenForConnections()
         {
-            if (_socket != null)
+            if (_listenSocket != null)
             {
-                _socket.BeginAccept(OnSocketAccept, _socket);
+                _listenSocket.BeginAccept(OnSocketAccept, _listenSocket);
             }
         }
 
@@ -273,50 +274,25 @@ namespace SocketServer.Server
 
         private void HandleClientMessage(SocketConnection connection, MemoryStream stream)
         {
-            // TODO.. address hacky cast
-            ClientSocketConnection client = connection as ClientSocketConnection;
-            ISocketMessage message = ReadMessage(connection, stream);
-            client.Read(message);
+            ReadMessage(connection, stream);
         }
 
         #endregion
 
-#region Private Classes
-
+        #region Private Classes
         private class ClientSocketConnection : SocketConnection
         {
             public bool IsAuthenticated { get; set; }
-
-            public List<ISocketMessage> WriteHistory = new List<ISocketMessage>();
-            public List<ISocketMessage> ReadHistory = new List<ISocketMessage>();
-
+            
             public ClientSocketConnection(Socket socket)
                 : base(socket)
             {
             }
-            
-            public void Write(ISocketMessage message, SocketMessageSerializer serializer)
-            {
-                lock (WriteHistory)
-                {
-                   // WriteHistory.Add(message);
-                    serializer.WriteMessage(this, message);
-                }
-            }
-
-            public void Read(ISocketMessage message)
-            {
-                lock (ReadHistory)
-                {
-                    //ReadHistory.Add(message);
-                }
-            }
-
             public override string ToString()
             {
                 return ConnectionName;
             }
         }
-#endregion
+        #endregion
     }
 }

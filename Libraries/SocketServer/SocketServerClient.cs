@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Net.Sockets;
 using System.Threading;
 using SocketServer.Messages;
 
@@ -17,6 +18,11 @@ namespace SocketServer
             Error
         }
 
+        public class Defaults
+        {
+            public int TimeOutSeconds = 5;
+        }
+
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim();
         private readonly string _host;
         private readonly int _port;
@@ -29,18 +35,15 @@ namespace SocketServer
         public State ConnectionState { get; private set; }
         public string ConnectionError { get; private set; }
 
-        // Debugging
-        public List<ISocketMessage> ReadHistory = new List<ISocketMessage>();
-
         protected SocketServerClient(string host, int port)
         {
             _host = host;
             _port = port;
             ConnectionState = State.Disconnected;
 
-            RegisterMessageType<PingRequestMessage>("PingRequestMessage", OnPingRequestMessage);
-            RegisterMessageType<PingResponseMessage>("PingResponseMessage", OnPingResponseMessage);
-            RegisterMessageType<AuthResponseMessage>("AuthResponseMessage", OnAuthResponseMessage);
+            RegisterMessageType<PingRequestMessage>(OnPingRequestMessage);
+            RegisterMessageType<PingResponseMessage>(OnPingResponseMessage);
+            RegisterMessageType<AuthResponseMessage>(OnAuthResponseMessage);
         }
 
         public void Dispose()
@@ -106,7 +109,8 @@ namespace SocketServer
 
         public void SendMessage(ISocketMessage message)
         {
-            if (_connection != null)
+            if (_connection != null &&
+                (_connection.ConnectionState == SocketConnection.State.Connected || _connection.ConnectionState == SocketConnection.State.Connected))
             {
                 WriteMessage(_connection, message);
             }
@@ -133,7 +137,7 @@ namespace SocketServer
         {
             if (ConnectionState == State.Connected)
             {
-               // WriteMessage(_connection, new PingRequestMessage());
+               WriteMessage(_connection, new PingRequestMessage());
             }
         }
 
@@ -151,7 +155,6 @@ namespace SocketServer
         private void HandleMessage(SocketConnection connection, MemoryStream stream)
         {
             ISocketMessage message = ReadMessage(connection, stream);
-            //ReadHistory.Add(message);
             OnMessage(message);
         }
 

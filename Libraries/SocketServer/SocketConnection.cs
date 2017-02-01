@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 using System.Net.Sockets;
-using System.Security.Principal;
+using System.Threading;
 using SocketServer.Utils;
 
 namespace SocketServer
@@ -11,14 +11,15 @@ namespace SocketServer
         public static class Defaults
         {
             public const int ReadBufferLen = 1024;
+            public const int ConnectionUpdateTimerMs = 1000;
+            public const int ConnectionTimeoutMs = 5000;
         }
         
         public enum State
         {
             Disconnected,
             Connecting,
-            Connected,
-            Error
+            Connected
         }
 
         public delegate void ConnectionStateCallback(SocketConnection connection);
@@ -32,12 +33,14 @@ namespace SocketServer
         
         private readonly object _writeLock = new object();
         private readonly object _readLock = new object();
+
         private Socket _socket;
+        private Timer _updateTimer;
+        private int _connectionTimeoutMs;
 
         private const int MessageHeaderSize = sizeof (UInt32);
-        private readonly byte[] _readBuffer;
         private int _readMessageLength;
-        private int _readMessageLengthRead;
+        private readonly byte[] _readBuffer;
         private readonly MemoryStream _readStream;
         private readonly MemoryStream _writeStream;
 
@@ -46,18 +49,19 @@ namespace SocketServer
         public event MessageCallback OnMessage;
         
         public SocketConnection()
-            : this(null, Defaults.ReadBufferLen)
+            : this(null, Defaults.ReadBufferLen, Defaults.ConnectionTimeoutMs)
         {
         }
 
         public SocketConnection(Socket socket)
-            : this(socket, Defaults.ReadBufferLen)
+            : this(socket, Defaults.ReadBufferLen, Defaults.ConnectionTimeoutMs)
         {
         }
 
-        public SocketConnection(Socket socket, int bufferLen)
+        public SocketConnection(Socket socket, int bufferLen, int connectionTimeoutMs)
         {
             _socket = socket;
+            _connectionTimeoutMs = connectionTimeoutMs;
             _readBuffer = new byte[bufferLen];
             _readStream = new MemoryStream(bufferLen);
             _writeStream = new MemoryStream(bufferLen);
@@ -70,9 +74,13 @@ namespace SocketServer
             lock (_writeLock)
             lock (_readLock)
             {
+                ConnectionState = State.Connecting;
                 _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
                 _socket.BeginConnect(host, port, OnConnect, this);
                 Logger.Info("[SocketConnection] Attempting to connecting to {0}:{1}", port, host);
+
+
+                _updateTimer = new Timer(OnUpdate, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
             }
         }
 
@@ -81,11 +89,19 @@ namespace SocketServer
             lock (_writeLock)
             lock (_readLock)
             {
+                ConnectionState = State.Disconnected;
+
                 if (_socket != null)
                 {
                     _socket.Shutdown(SocketShutdown.Both);
                     _socket.Close();
                     _socket = null;
+                }
+
+                if (_updateTimer != null)
+                {
+                    _updateTimer.Dispose();
+                    _updateTimer = null;
                 }
             }
         }
@@ -130,6 +146,21 @@ namespace SocketServer
         }
 
         #region Private Methods
+
+        private void OnUpdate(object state)
+        {
+            if (ConnectionState != State.Connected)
+            {
+                return;
+            }
+
+            TimeSpan timeSpan = DateTime.UtcNow - LastMessageTime;
+            if (timeSpan.TotalMilliseconds > _connectionTimeoutMs)
+            {
+                Disconnect();
+            }
+        }
+
         private void OnConnect(IAsyncResult ar)
         {
             lock (_readLock)
@@ -138,14 +169,16 @@ namespace SocketServer
                 {
                     // Complete the connection.
                     _socket.EndConnect(ar);
+
+                    LastMessageTime = DateTime.UtcNow;
+                    SetConnectionState(State.Connected);
                     ListenForData();
 
                     Logger.Info("[SocketConnection] Successfully connected to {0}", _socket.RemoteEndPoint);
-
-                    SetConnectionState(State.Connected);
                 }
                 catch (Exception e)
                 {
+                    ConnectionState = State.Disconnected;
                     Logger.Error("[SocketConnection] OnConnect Failed: {0}", e);
                 }
             }
@@ -155,7 +188,7 @@ namespace SocketServer
         {
             lock (_readLock)
             {
-                if (_socket == null)
+                if (ConnectionState != State.Connected)
                 {
                     return;
                 }
@@ -175,9 +208,10 @@ namespace SocketServer
                             // Read the header
                             if (_readMessageLength == 0)
                             {
-                                // The message header might be split across multiple callbacks, so always cache it to
-                                // the stream first.
-                                int readLen = Math.Min(MessageHeaderSize - (int)_readStream.Length, bytesRecieved - readIndex);
+                                // The message header might be split across multiple callbacks, 
+                                // so transfer the available bytes to the read stream before processing.
+                                int bytesAvailable = (int) (bytesRecieved - readIndex);
+                                int readLen = Math.Min(MessageHeaderSize - (int) _readStream.Length, bytesAvailable);
                                 _readStream.Write(_readBuffer, readIndex, readLen);
                                 readIndex += readLen;
 
@@ -185,7 +219,7 @@ namespace SocketServer
                                 {
                                     // Parse the header
                                     _readStream.Seek(0, SeekOrigin.Begin);
-                                    _readMessageLength = (int)BinaryUtils.ReadUInt32(_readStream);
+                                    _readMessageLength = (int) BinaryUtils.ReadUInt32(_readStream);
 
                                     // Reset for the message data.
                                     _readStream.SetLength(0);
@@ -195,14 +229,13 @@ namespace SocketServer
                             // Read the Mesage Data
                             if (_readMessageLength > 0)
                             {
-                                int bytesAvailable = (int)(bytesRecieved - readIndex);
-                                int readLen = Math.Min(bytesAvailable, _readMessageLength - _readMessageLengthRead);
+                                int bytesAvailable = (int) (bytesRecieved - readIndex);
+                                int readLen = Math.Min(_readMessageLength - (int) _readStream.Length, bytesAvailable);
                                 _readStream.Write(_readBuffer, readIndex, readLen);
-                                _readMessageLengthRead += readLen;
                                 readIndex += readLen;
 
                                 // Handle a completed message
-                                if (_readMessageLength == _readMessageLengthRead)
+                                if (_readStream.Length == _readMessageLength)
                                 {
                                     // Process the message
                                     MessageCallback callback = OnMessage;
@@ -221,12 +254,16 @@ namespace SocketServer
 
                                     // Reset for the next message
                                     _readMessageLength = 0;
-                                    _readMessageLengthRead = 0;
                                     _readStream.SetLength(0);
                                 }
                             }
                         }
                     }
+                }
+                catch (SocketException e)
+                {
+                    Disconnect();
+                    Logger.Error("[SocketConnection] OnRecieve Had SocketException: ErrorCode:{0}, SocketError={1}", e.ErrorCode, e.SocketErrorCode);
                 }
                 catch (Exception e)
                 {

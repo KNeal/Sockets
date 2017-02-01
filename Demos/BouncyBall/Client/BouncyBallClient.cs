@@ -10,9 +10,9 @@ namespace BouncyBall.Client
         public BouncyBallClient(string host, int port) 
             : base(host, port)
         {
-            RegisterMessageType<CreateBallMessage>("CreateBallMessage", OnCreateBallMessage);
-            RegisterMessageType<DestroyBallMessage>("DestroyBallMessage", OnDestroyBallMessage);
-            RegisterMessageType<UpdateBallMessage>("UpdateBallMessage", OnUpdateBallMessage);
+            RegisterMessageType<CreateBallMessage>(OnCreateBallMessage);
+            RegisterMessageType<DestroyBallMessage>(OnDestroyBallMessage);
+            RegisterMessageType<UpdateBallMessage>(OnUpdateBallMessage);
         }
 
         public virtual void OnUpdateBallMessage(ISocketConnection arg1, UpdateBallMessage message)

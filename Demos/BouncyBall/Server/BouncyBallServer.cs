@@ -11,8 +11,8 @@ namespace BouncyBall.Server
 
         public BouncyBallServer()
         {
-            RegisterMessageType<CreateBallMessage>("CreateBallMessage", OnCreateBallMessage);
-            RegisterMessageType<UpdateBallMessage>("UpdateBallMessage", OnUpdateBallPositionMessage);
+            RegisterMessageType<CreateBallMessage>(OnCreateBallMessage);
+            RegisterMessageType<UpdateBallMessage>(OnUpdateBallPositionMessage);
         }
 
         #region Connection Management

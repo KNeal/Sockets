@@ -48,6 +48,7 @@
   <ItemGroup>
     <Compile Include="Messages\AuthResponseMessage.cs" />
     <Compile Include="AuthResult.cs" />
+    <Compile Include="Messages\DisconnectMessage.cs" />
     <Compile Include="Utils\BinaryUtils.cs" />
     <Compile Include="Messages\AuthRequestMessage.cs" />
     <Compile Include="ISocketConnection.cs" />

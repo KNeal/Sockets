@@ -14,16 +14,18 @@ namespace SocketServer
         private readonly ReaderWriterLockSlim _lock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
         private readonly Dictionary<string, MessageTypeHandler> _messageTypes = new Dictionary<string, MessageTypeHandler>();
 
-        public void RegisterMessageType<T>(string messageId, Action<ISocketConnection, T> messageHandler) where T : ISocketMessage
+        public void RegisterMessageType<T>(Action<ISocketConnection, T> messageHandler) where T : ISocketMessage
         {
             _lock.EnterWriteLock();
             try
             {
+                ISocketMessage message = Activator.CreateInstance(typeof(T)) as ISocketMessage;
+
                 MessageTypeHandler handler;
-                if (!_messageTypes.TryGetValue(messageId, out handler))
+                if (!_messageTypes.TryGetValue(message.MessageType, out handler))
                 {
                     handler = new MessageTypeHandler<T>();
-                    _messageTypes.Add(messageId, handler);
+                    _messageTypes.Add(message.MessageType, handler);
                 }
 
                 MessageTypeHandler<T> handlerT = handler as MessageTypeHandler<T>;
